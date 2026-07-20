@@ -18,7 +18,8 @@ Example layout:
 ```text
 core/
 	templates/
-		home.html
+		core/
+			home.html
 	static/
 		styles.css
 ```
