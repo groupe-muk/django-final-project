@@ -49,3 +49,30 @@ python manage.py runserver
 ## Stitch Designs
 
 [Designs](https://stitch.withgoogle.com/projects/18083315923321736018)
+
+## Overall Project Structure
+
+DJANGO-FINAL-PROJECT/         # Root repository directory
+├── core/                     # Core Django app folder
+│   ├── migrations/           # Database migration files
+│   ├── static/               # CSS and static assets
+│   │   └── styles.css        # Global stylesheet
+│   ├── templates/            # HTML templates folder
+│   │   └── core/             # Namespaced folder to avoid layout conflicts
+│   │       ├── history.html  # Translation history dashboard page
+│   │       └── translator.html # Main translation page
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py             # Database models configuration
+│   ├── tests.py
+│   ├── urls.py               # App-level routing
+│   └── views.py              # Application logic (API handling & history queries)
+├── project/                  # Project configuration folder
+│   ├── asgi.py
+│   ├── settings.py           # Global project configuration settings
+│   ├── urls.py               # Root-level routing
+│   └── wsgi.py
+├── .gitignore                # Tells Git which local files to ignore
+├── manage.py                 # Django command-line utility
+├── README.md                 # Project overview and documentation instructions
+└── requirements.txt          # Python environment dependencies
