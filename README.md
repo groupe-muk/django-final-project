@@ -52,6 +52,7 @@ python manage.py runserver
 
 ## Overall Project Structure
 
+```text
 DJANGO-FINAL-PROJECT/         # Root repository directory
 ├── core/                     # Core Django app folder
 │   ├── migrations/           # Database migration files
@@ -76,3 +77,5 @@ DJANGO-FINAL-PROJECT/         # Root repository directory
 ├── manage.py                 # Django command-line utility
 ├── README.md                 # Project overview and documentation instructions
 └── requirements.txt          # Python environment dependencies
+
+```
