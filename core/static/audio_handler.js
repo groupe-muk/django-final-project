@@ -65,7 +65,6 @@ async function sendAudioToDjango(audioFile) {
         const data = await response.json();
         
         if (response.ok) {
-            // Inject the transcribed text directly into Member 1's translation input box
             const inputField = document.getElementById('source-text-input');
             if (inputField) {
                 inputField.value = data.text;
