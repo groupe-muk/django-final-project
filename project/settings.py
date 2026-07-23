@@ -1,14 +1,22 @@
-"""Django settings for base project."""
 from pathlib import Path
 import os
+import environ
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "replace-me-with-secure-key")
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "")
 
-DEBUG = True
+env = environ.Env(
+    DEBUG=(bool, False),
+    ALLOWED_HOSTS=(list, [])
+)
 
-ALLOWED_HOSTS = []
+environ.Env.read_env(BASE_DIR / '.env')
+
+GROQ_API_KEY = env('GROQ_API_KEY')
+DEBUG = env('DEBUG')
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 INSTALLED_APPS = [
     "django.contrib.admin",
