@@ -1,18 +1,36 @@
 {% extends "core/base.html" %}
 
-{% block title %}Register | LinguaShift{% endblock %}
-{% block page_heading %}Create account{% endblock %}
-{% block page_subtitle %}Join LinguaShift to translate and save your work.{% endblock %}
-{% block hero_title %}Create your LinguaShift account.{% endblock %}
-{% block hero_text %}Set up your account to access the translator, track your history, and switch themes across the app.{% endblock %}
-{% block content_title %}Sign up{% endblock %}
-{% block content_subtitle %}Fill in the form to create your account.{% endblock %}
+{% block title %}Sign Up — LinguaShift{% endblock %}
+{% block page_heading %}Create Your Account{% endblock %}
+{% block page_subtitle %}Join LinguaShift for enterprise-grade translation.{% endblock %}
+
+{% block hero_title %}Get Started{% endblock %}
+{% block hero_text %}It only takes a minute to set up your workspace.{% endblock %}
+
+{% block content_title %}Account{% endblock %}
+{% block content_subtitle %}Fill in the details below to register.{% endblock %}
+
 {% block content %}
-<form method="post" class="auth-form">
+<form method="post" action="{% url 'register' %}">
   {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="action-button primary">Sign up</button>
+
+  {% for field in form %}
+    <div class="field">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<p class="helptext">{{ field.help_text }}</p>{% endif %}
+      {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+  {% endfor %}
+
+  {% if form.non_field_errors %}
+    <ul class="errorlist">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>
+  {% endif %}
+
+  <button type="submit" class="btn btn-primary btn-block mt-8">Create Account</button>
 </form>
 
-<p style="margin-top: 16px; color: var(--muted);">Already have an account? <a href="{% url 'login' %}">Log in</a></p>
+<p class="auth-foot">
+  Already have an account? <a href="{% url 'login' %}">Log in</a>
+</p>
 {% endblock %}

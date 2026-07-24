@@ -22,25 +22,32 @@ def history(request):
 
     entries = [
         {
-            "source": "English",
-            "target": "French",
-            "text": "The report was approved this morning.",
-            "translation": "Le rapport a été approuvé ce matin.",
-            "time": "2 min ago",
+            "source": "EN → ES",
+            "target": "Spanish",
+            "text": "The architectural design of the system enforces...",
+            "translation": "El diseño arquitectónico del sistema garantiza...",
+            "time": "2 hours ago",
         },
         {
-            "source": "Spanish",
+            "source": "FR → EN",
             "target": "English",
-            "text": "Necesitamos revisar los detalles finales.",
-            "translation": "We need to review the final details.",
-            "time": "14 min ago",
+            "text": "Veuillez agréer, Monsieur, l'expression d...",
+            "translation": "Please accept, Sir, the expression of my...",
+            "time": "5 hours ago",
         },
         {
-            "source": "German",
+            "source": "DE → EN",
             "target": "English",
-            "text": "Bitte senden Sie die aktualisierte Version.",
-            "translation": "Please send the updated version.",
-            "time": "1 hour ago",
+            "text": "Die Benutzeroberfläche wurde für maxi...",
+            "translation": "The user interface has been optimized f...",
+            "time": "Yesterday",
+        },
+        {
+            "source": "EN → JP",
+            "target": "Japanese",
+            "text": "API keys are required to authenticate re...",
+            "translation": "APIキーが必要です。",
+            "time": "Yesterday",
         },
     ]
 
