@@ -67,11 +67,19 @@ Example response:
 Configuration:
 
 ```text
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+GROQ_API_KEY=
 MYMEMORY_BASE_URL=https://api.mymemory.translated.net
 MYMEMORY_CONTACT_EMAIL=
 MYMEMORY_API_KEY=
 MYMEMORY_TIMEOUT_SECONDS=10
 ```
+
+Copy `.env.example` to `.env` for local development. Django loads this file
+through `django-environ`. Existing deployments using `DJANGO_DEBUG` and
+`DJANGO_ALLOWED_HOSTS` remain supported and take precedence over the shorter
+local variable names.
 
 ### Evaluation criteria
 

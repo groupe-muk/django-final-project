@@ -104,3 +104,13 @@ pip install -r requirements.txt
 ```bash
 uv pip install -r requirements.txt
 ```
+
+Create a local environment file:
+
+```bash
+cp .env.example .env
+```
+
+The example enables local development on `localhost` and `127.0.0.1`. Add
+`GROQ_API_KEY` only when testing audio transcription. MyMemory works without an
+API key for the initial translation evaluation.

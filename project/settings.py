@@ -1,8 +1,13 @@
 from pathlib import Path
 import os
 
+import environ
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load local values without overriding variables supplied by the shell or host.
+environ.Env.read_env(BASE_DIR / ".env", overwrite=False)
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "replace-me-with-secure-key")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
@@ -14,9 +19,13 @@ MYMEMORY_API_KEY = os.environ.get("MYMEMORY_API_KEY", "")
 MYMEMORY_TIMEOUT_SECONDS = float(
     os.environ.get("MYMEMORY_TIMEOUT_SECONDS", "10")
 )
-DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in {"1", "true", "yes", "on"}
+debug_value = os.environ.get("DJANGO_DEBUG", os.environ.get("DEBUG", "True"))
+DEBUG = debug_value.lower() in {"1", "true", "yes", "on"}
 
-allowed_hosts_value = os.environ.get("DJANGO_ALLOWED_HOSTS", "")
+allowed_hosts_value = os.environ.get(
+    "DJANGO_ALLOWED_HOSTS",
+    os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1"),
+)
 ALLOWED_HOSTS = [host.strip() for host in allowed_hosts_value.split(",") if host.strip()]
 
 INSTALLED_APPS = [
