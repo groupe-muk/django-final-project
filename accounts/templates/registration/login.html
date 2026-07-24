@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+
+{% block title %}Log in | LinguaShift{% endblock %}
+{% block page_heading %}Log in{% endblock %}
+{% block page_subtitle %}Access your LinguaShift account to translate and save history.{% endblock %}
+{% block hero_title %}Welcome back.{% endblock %}
+{% block hero_text %}Use your account to continue translating, view history, and keep your workspace synced across sessions.{% endblock %}
+{% block content_title %}Sign in{% endblock %}
+{% block content_subtitle %}Enter your account details to continue.{% endblock %}
+{% block content %}
+<form method="post" class="auth-form">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="action-button primary">Log in</button>
+</form>
+
+<p style="margin-top: 16px; color: var(--muted);">No account? <a href="{% url 'register' %}">Sign up</a></p>
+{% endblock %}
