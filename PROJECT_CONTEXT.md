@@ -74,9 +74,10 @@ django-final-project/
 ### File: `project/settings.py`
 
 - **SECRET_KEY**: Read from `DJANGO_SECRET_KEY` env var, fallback `"replace-me-with-secure-key"`
-- **DEBUG**: Read from `DJANGO_DEBUG` env var (default `True`)
-- **ALLOWED_HOSTS**: Comma-separated from `DJANGO_ALLOWED_HOSTS` env var
+- **DEBUG**: Read from `DJANGO_DEBUG` or `DEBUG` env var (default `True`)
+- **ALLOWED_HOSTS**: Comma-separated from `DJANGO_ALLOWED_HOSTS` or `ALLOWED_HOSTS`
 - **GROQ_API_KEY**: Read from `GROQ_API_KEY` env var (used for Groq/Whisper API calls)
+- **Local env file**: `.env` is loaded through `django-environ`; copy `.env.example`
 - **INSTALLED_APPS**: `django.contrib.admin`, `auth`, `contenttypes`, `sessions`, `messages`, `staticfiles`, `core`, `accounts`
 - **TEMPLATES**: `DIRS` includes `BASE_DIR / "templates"` (project-level templates), `APP_DIRS` is `True`
 - **DATABASES**: SQLite (`db.sqlite3`)
@@ -362,4 +363,3 @@ Fallback Base (not actively used):
 ---
 
 *Generated from full codebase analysis. Update this file when project structure changes.*
-
