@@ -79,3 +79,11 @@ DJANGO-FINAL-PROJECT/         # Root repository directory
 └── requirements.txt          # Python environment dependencies
 
 ```
+## Transciption set up
+
+Run this:
+
+```powershell
+pip install django-environ
+pip install groq
+```
