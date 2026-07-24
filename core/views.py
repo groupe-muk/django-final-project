@@ -1,12 +1,95 @@
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.http import JsonResponse
 from groq import Groq
 import os
+from .models import Translation
 
 
+@login_required
+def history(request):
 
+    query = request.GET.get("q", "").strip()
+
+    translations = Translation.objects.filter(user=request.user).select_related(
+        "source_lang", "target_lang"
+    )
+
+    if query:
+        translations = translations.filter(
+            Q(source_text__icontains=query) | Q(translated_text__icontains=query)
+        )
+
+    paginator = Paginator(translations, 20)
+    page_obj = paginator.get_page(request.GET.get("page"))
+
+    return render(
+        request,
+        "history.html",
+        {"page_obj": page_obj, "query": query},
+    )
+
+
+@login_required
+def delete_history(request, id):
+    translation = get_object_or_404(Translation, id=id, user=request.user)
+    translation.delete()
+    return redirect("history")
+
+
+@login_required
+def clear_history(request):
+    Translation.objects.filter(user=request.user).delete()
+    return redirect("history")
+
+
+@login_required
+def reload_translation(request, id):
+    translation = get_object_or_404(Translation, id=id, user=request.user)
+    return render(request, "translation.html", {"translation": translation})
 def home(request):
-    return HttpResponse("Hello, Django base project!")
+    from django.shortcuts import render
+
+    return render(request, "core/translator.html")
+
+
+def translator(request):
+    from django.shortcuts import render
+
+    return render(request, "core/translator.html")
+
+
+def history(request):
+    from django.shortcuts import render
+
+    entries = [
+        {
+            "source": "English",
+            "target": "French",
+            "text": "The report was approved this morning.",
+            "translation": "Le rapport a été approuvé ce matin.",
+            "time": "2 min ago",
+        },
+        {
+            "source": "Spanish",
+            "target": "English",
+            "text": "Necesitamos revisar los detalles finales.",
+            "translation": "We need to review the final details.",
+            "time": "14 min ago",
+        },
+        {
+            "source": "German",
+            "target": "English",
+            "text": "Bitte senden Sie die aktualisierte Version.",
+            "translation": "Please send the updated version.",
+            "time": "1 hour ago",
+        },
+    ]
+
+    return render(request, "core/history.html", {"entries": entries})
 
 
 def transcribe_audio(request):

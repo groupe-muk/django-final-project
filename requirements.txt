@@ -1,3 +1,5 @@
 Django>=4.2,<5
 djangorestframework
 psycopg2-binary
+groq
+django-environ
