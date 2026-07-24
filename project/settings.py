@@ -6,6 +6,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "replace-me-with-secure-key")
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+MYMEMORY_BASE_URL = os.environ.get(
+    "MYMEMORY_BASE_URL", "https://api.mymemory.translated.net"
+)
+MYMEMORY_CONTACT_EMAIL = os.environ.get("MYMEMORY_CONTACT_EMAIL", "")
+MYMEMORY_API_KEY = os.environ.get("MYMEMORY_API_KEY", "")
+MYMEMORY_TIMEOUT_SECONDS = float(
+    os.environ.get("MYMEMORY_TIMEOUT_SECONDS", "10")
+)
 DEBUG = os.environ.get("DJANGO_DEBUG", "True").lower() in {"1", "true", "yes", "on"}
 
 allowed_hosts_value = os.environ.get("DJANGO_ALLOWED_HOSTS", "")
@@ -76,4 +84,3 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "login"
-

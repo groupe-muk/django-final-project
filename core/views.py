@@ -1,12 +1,38 @@
+import json
+import os
+from time import monotonic
+
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 from groq import Groq
-import os
+
 from .models import Translation
+from .services.mymemory import (
+    MAX_QUERY_BYTES,
+    TranslationQuotaError,
+    TranslationServiceError,
+    translate_text,
+)
+
+
+SUPPORTED_LANGUAGES = [
+    {"code": "ar", "name": "Arabic"},
+    {"code": "zh-CN", "name": "Chinese (Simplified)"},
+    {"code": "en", "name": "English"},
+    {"code": "fr", "name": "French"},
+    {"code": "de", "name": "German"},
+    {"code": "hi", "name": "Hindi"},
+    {"code": "it", "name": "Italian"},
+    {"code": "ja", "name": "Japanese"},
+    {"code": "pt", "name": "Portuguese"},
+    {"code": "es", "name": "Spanish"},
+    {"code": "sw", "name": "Swahili"},
+]
+SUPPORTED_LANGUAGE_CODES = {language["code"] for language in SUPPORTED_LANGUAGES}
 
 
 @login_required
@@ -50,16 +76,86 @@ def clear_history(request):
 def reload_translation(request, id):
     translation = get_object_or_404(Translation, id=id, user=request.user)
     return render(request, "translation.html", {"translation": translation})
-def home(request):
-    from django.shortcuts import render
 
-    return render(request, "core/translator.html")
+
+def home(request):
+    return render(
+        request,
+        "core/translator.html",
+        {"languages": SUPPORTED_LANGUAGES, "max_query_bytes": MAX_QUERY_BYTES},
+    )
 
 
 def translator(request):
-    from django.shortcuts import render
+    return render(
+        request,
+        "core/translator.html",
+        {"languages": SUPPORTED_LANGUAGES, "max_query_bytes": MAX_QUERY_BYTES},
+    )
 
-    return render(request, "core/translator.html")
+
+@require_POST
+def translate_api(request):
+    if request.content_type != "application/json":
+        return JsonResponse(
+            {"error": "Content-Type must be application/json."},
+            status=415,
+        )
+
+    try:
+        payload = json.loads(request.body or b"{}")
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return JsonResponse({"error": "Request body must be valid JSON."}, status=400)
+
+    if not isinstance(payload, dict):
+        return JsonResponse({"error": "Request body must be a JSON object."}, status=400)
+
+    source_text = str(payload.get("source_text") or "").strip()
+    source_lang = str(payload.get("source_lang") or "")
+    target_lang = str(payload.get("target_lang") or "")
+
+    if not source_text:
+        return JsonResponse({"error": "Enter text to translate."}, status=400)
+    if source_lang not in SUPPORTED_LANGUAGE_CODES:
+        return JsonResponse({"error": "Select a supported source language."}, status=400)
+    if target_lang not in SUPPORTED_LANGUAGE_CODES:
+        return JsonResponse({"error": "Select a supported target language."}, status=400)
+    if source_lang == target_lang:
+        return JsonResponse(
+            {"error": "Source and target languages must be different."},
+            status=400,
+        )
+
+    byte_count = len(source_text.encode("utf-8"))
+    if byte_count > MAX_QUERY_BYTES:
+        return JsonResponse(
+            {
+                "error": (
+                    f"Text is {byte_count} UTF-8 bytes; "
+                    f"MyMemory accepts at most {MAX_QUERY_BYTES}."
+                )
+            },
+            status=400,
+        )
+
+    started_at = monotonic()
+    try:
+        result = translate_text(source_text, source_lang, target_lang)
+    except TranslationQuotaError as exc:
+        return JsonResponse({"error": str(exc)}, status=429)
+    except TranslationServiceError as exc:
+        return JsonResponse({"error": str(exc)}, status=503)
+
+    latency_ms = round((monotonic() - started_at) * 1000)
+    return JsonResponse(
+        {
+            "translated_text": result.translated_text,
+            "match": result.match,
+            "latency_ms": latency_ms,
+            "word_count": len(source_text.split()),
+            "provider": "mymemory",
+        }
+    )
 
 
 def history(request):

@@ -3,3 +3,4 @@ djangorestframework
 psycopg2-binary
 groq
 django-environ
+requests>=2.32,<3
