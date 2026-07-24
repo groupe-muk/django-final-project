@@ -1,0 +1,217 @@
+{% extends "core/base.html" %}
+
+{% block title %}History Dashboard | LinguaShift{% endblock %}
+{% block page_heading %}Translation History{% endblock %}
+{% block page_subtitle %}Review saved translations, language pairs, and recent activity at a glance.{% endblock %}
+{% block hero_title %}Track every translation in one place.{% endblock %}
+{% block hero_text %}This dashboard mirrors the history screen from your screenshot with a rich table, stats, and a compact action bar for managing saved items.{% endblock %}
+{% block content_title %}Recent Activity{% endblock %}
+{% block content_subtitle %}Latest translations captured from the workspace.{% endblock %}
+{% block content %}
+<style>
+	.history-summary {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 16px;
+		margin-bottom: 20px;
+	}
+
+	.summary-card {
+		padding: 18px;
+		border-radius: 20px;
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid var(--border);
+	}
+
+	.summary-card span {
+		display: block;
+		color: var(--muted);
+		font-size: 0.84rem;
+		margin-bottom: 8px;
+	}
+
+	.summary-card strong {
+		font-size: 1.5rem;
+		letter-spacing: -0.03em;
+	}
+
+	.history-toolbar {
+		display: flex;
+		gap: 12px;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 18px;
+	}
+
+	.search-pill {
+		flex: 1 1 280px;
+		min-height: 46px;
+		padding: 0 16px;
+		border-radius: 16px;
+		border: 1px solid var(--border);
+		background: rgba(255, 255, 255, 0.03);
+		color: var(--muted);
+		display: flex;
+		align-items: center;
+	}
+
+	.history-table {
+		width: 100%;
+		border-collapse: collapse;
+		overflow: hidden;
+		border-radius: 22px;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid var(--border);
+	}
+
+	.history-table th,
+	.history-table td {
+		padding: 16px 18px;
+		text-align: left;
+		vertical-align: top;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	}
+
+	.history-table th {
+		color: var(--muted);
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		background: rgba(255, 255, 255, 0.03);
+	}
+
+	.history-table tr:last-child td {
+		border-bottom: 0;
+	}
+
+	.history-pair {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 7px 10px;
+		border-radius: 999px;
+		background: rgba(38, 216, 245, 0.08);
+		color: var(--accent);
+		font-size: 0.82rem;
+		white-space: nowrap;
+	}
+
+	.history-text {
+		margin: 0;
+		color: var(--text);
+		line-height: 1.6;
+	}
+
+	.history-muted {
+		color: var(--muted);
+		font-size: 0.9rem;
+	}
+
+	.row-actions {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
+	}
+
+	.row-actions a {
+		padding: 8px 12px;
+		border-radius: 12px;
+		border: 1px solid var(--border);
+		background: rgba(255, 255, 255, 0.03);
+		color: var(--text);
+		font-size: 0.85rem;
+	}
+
+	@media (max-width: 860px) {
+		.history-summary {
+			grid-template-columns: 1fr;
+		}
+
+		.history-table,
+		.history-table thead,
+		.history-table tbody,
+		.history-table th,
+		.history-table td,
+		.history-table tr {
+			display: block;
+		}
+
+		.history-table thead {
+			position: absolute;
+			left: -9999px;
+			top: -9999px;
+		}
+
+		.history-table tr {
+			margin-bottom: 14px;
+			border: 1px solid var(--border);
+			border-radius: 18px;
+			overflow: hidden;
+		}
+
+		.history-table td {
+			border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+		}
+
+		.history-table td:last-child {
+			border-bottom: 0;
+		}
+	}
+</style>
+
+<div class="history-summary">
+	<div class="summary-card">
+		<span>Total entries</span>
+		<strong>{{ entries|length }}</strong>
+	</div>
+	<div class="summary-card">
+		<span>Languages used</span>
+		<strong>4</strong>
+	</div>
+	<div class="summary-card">
+		<span>Saved today</span>
+		<strong>12</strong>
+	</div>
+</div>
+
+<div class="history-toolbar">
+	<div class="search-pill">Search history...</div>
+	<div class="row-actions">
+		<a href="#">Export CSV</a>
+		<a href="#">Clear all</a>
+	</div>
+</div>
+
+<table class="history-table" id="history">
+	<thead>
+		<tr>
+			<th>Language pair</th>
+			<th>Source text</th>
+			<th>Translated text</th>
+			<th>Time</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for entry in entries %}
+		<tr>
+			<td><span class="history-pair">{{ entry.source }} → {{ entry.target }}</span></td>
+			<td><p class="history-text">{{ entry.text }}</p></td>
+			<td><p class="history-text">{{ entry.translation }}</p></td>
+			<td class="history-muted">{{ entry.time }}</td>
+			<td>
+				<div class="row-actions">
+					<a href="#">Copy</a>
+					<a href="#">Reuse</a>
+				</div>
+			</td>
+		</tr>
+		{% empty %}
+		<tr>
+			<td colspan="5" class="history-muted">No history entries yet.</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% endblock %}
