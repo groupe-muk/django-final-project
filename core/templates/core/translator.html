@@ -99,6 +99,9 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.1L19 9l-5.4 1.9L12 16l-1.6-5.1L5 9l5.4-1.9L12 2zM19 13l.8 2.6L22 16l-2.2.8L19 19l-.8-2.2L16 16l2.2-.4L19 13z"/></svg>
     </button>
     <p id="translate-error" role="alert" style="display:none; color:#ff8a8a; margin-top:14px;"></p>
+    <p id="translate-success" role="status" style="display:none; color:var(--accent-cyan); margin-top:14px;">
+      Translation saved to your history.
+    </p>
   </div>
 </form>
 
@@ -141,6 +144,7 @@
   const charCount = document.getElementById('char-count');
   const output = document.getElementById('output-copy');
   const errorOutput = document.getElementById('translate-error');
+  const successOutput = document.getElementById('translate-success');
   const translateButton = document.getElementById('translate-btn');
   const maxQueryBytes = {{ max_query_bytes }};
   const byteLength = value => new TextEncoder().encode(value).length;
@@ -156,6 +160,7 @@
   translateForm.addEventListener('submit', async function (event) {
     event.preventDefault();
     errorOutput.style.display = 'none';
+    successOutput.style.display = 'none';
 
     const sourceText = sourceInput.value.trim();
     const sourceLang = document.getElementById('source-lang').value;
@@ -202,6 +207,7 @@
       document.getElementById('stat-accuracy').textContent =
         data.match === null ? '—' : Math.round(data.match * 100) + '%';
       document.getElementById('stat-words').textContent = data.word_count;
+      successOutput.style.display = data.saved ? 'block' : 'none';
     } catch (error) {
       showError(error.message || 'Unable to reach the translation service.');
     } finally {

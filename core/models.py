@@ -1,23 +1,19 @@
-from datetime import datetime
-from pyexpat import model
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 
 class Language(models.Model):
-    code = models.CharField(max_length=8, null=False, unique=True)  
-    name = models.CharField(max_length=64, null=False)               
-    is_active = models.BooleanField(default=True, null=False)
+    code = models.CharField(max_length=8, unique=True)
+    name = models.CharField(max_length=64)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["name"]
-        
+
     def __str__(self):
         return self.name
 
 
 class Translation(models.Model):
-
     INPUT_MODE_CHOICES = [
         ("text", "Text"),
         ("voice", "Voice"),
@@ -29,30 +25,32 @@ class Translation(models.Model):
         related_name="translations",
     )
 
-    source_lang_id = models.ForeignKey(
+    source_lang = models.ForeignKey(
         Language,
         on_delete=models.RESTRICT,
-        related_name="language_source",
+        related_name="source_translations",
     )
-    target_lang_id = models.ForeignKey(
+    target_lang = models.ForeignKey(
         Language,
         on_delete=models.RESTRICT,
-        related_name="language_target",
+        related_name="target_translations",
     )
 
-    source_text = models.TextField(null=False)
-    translated_text = models.TextField(null=False)
+    source_text = models.TextField()
+    translated_text = models.TextField()
 
-    was_detected = models.BooleanField(default=False,null=False) #True if the source was auto-detected  
+    was_detected = models.BooleanField(default=False)
     input_mode = models.CharField(
-        max_length=16, choices=INPUT_MODE_CHOICES, null=False, default="text"
-    )#How the source was entered: 'text' or 'voice'
+        max_length=16,
+        choices=INPUT_MODE_CHOICES,
+        default="text",
+    )
 
-    latency_ms = models.IntegerField(null=True, blank=True)    
-    was_successful = models.BooleanField(default=True, null=False)          
-    word_count = models.IntegerField(default=0, null=False)                
+    latency_ms = models.IntegerField(null=True, blank=True)
+    was_successful = models.BooleanField(default=True)
+    word_count = models.IntegerField(default=0)
 
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True, null=False)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
         ordering = ["-created_at"]
@@ -64,6 +62,5 @@ class Translation(models.Model):
         return f"{self.user} ({self.source_lang.code} -> {self.target_lang.code})"
 
     def save(self, *args, **kwargs):
-        if not self.word_count and self.source_text:
-            self.word_count = len(self.source_text.split())
+        self.word_count = len(self.source_text.split()) if self.source_text else 0
         super().save(*args, **kwargs)
