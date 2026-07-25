@@ -11,7 +11,7 @@
   </p>
 </section>
 
-<form id="translate-form" method="post" action="{% url 'translator' %}">
+<form id="translate-form" method="post" action="{% url 'translator' %}" data-transcribe-url="{% url 'transcribe_audio' %}">
   {% csrf_token %}
   <div class="grid-2">
 
@@ -44,13 +44,13 @@
       <div class="flex items-center justify-between mt-16" style="border-top:1px solid var(--glass-border); padding-top:14px;">
         <span class="label-sm" id="char-count">0/{{ max_query_bytes }} bytes</span>
         <div class="flex gap-12">
-          <button type="button" id="mic-btn" class="icon-btn" title="Record audio" aria-label="Record audio">
+          <button type="button" id="mic-btn" class="icon-btn" title="Record audio" aria-label="Record audio" onclick="toggleRecording()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg>
           </button>
           <button type="button" id="upload-btn" class="icon-btn" title="Upload document" aria-label="Upload document">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
           </button>
-          <input type="file" id="audio-file-input" accept="audio/*" style="display:none;">
+          <input type="file" id="audio-file-input" accept="audio/*" style="display:none;" onchange="handleFileUpload(event)">
         </div>
       </div>
     </div>

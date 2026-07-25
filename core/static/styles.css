@@ -404,6 +404,35 @@ body[data-theme="light"] .app-topbar {
   box-shadow: 0 0 0 1px var(--glass-border-strong);
 }
 
+.icon-btn.recording-active {
+  color: #ff8a8a;
+  box-shadow:
+    0 0 0 1px rgba(255, 138, 138, 0.45),
+    0 0 18px rgba(255, 138, 138, 0.25);
+}
+
+#mic-btn.recording-active {
+  color: #ff4d4d;
+  border-color: rgba(255, 77, 77, 0.7);
+  background: rgba(255, 77, 77, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(255, 77, 77, 0.55),
+    0 0 20px rgba(255, 77, 77, 0.35);
+  animation: mic-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes mic-pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 .avatar {
   width: 36px;
   height: 36px;
