@@ -87,3 +87,30 @@ Run this:
 pip install django-environ
 pip install groq
 ```
+
+## Translation API
+
+The translator currently uses MyMemory through the Django backend. The planned
+fallback is a separately hosted FastAPI service backed by Argos Translate.
+See [docs/translation-architecture.md](docs/translation-architecture.md) for the
+API contract, configuration, test results, and migration plan.
+
+Install the shared dependencies with either tool:
+
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+uv pip install -r requirements.txt
+```
+
+Create a local environment file:
+
+```bash
+cp .env.example .env
+```
+
+The example enables local development on `localhost` and `127.0.0.1`. Add
+`GROQ_API_KEY` only when testing audio transcription. MyMemory works without an
+API key for the initial translation evaluation.

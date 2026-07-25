@@ -68,6 +68,7 @@ async function sendAudioToDjango(audioFile) {
             const inputField = document.getElementById('source-text-input');
             if (inputField) {
                 inputField.value = data.text;
+                inputField.dispatchEvent(new Event('input'));
             }
         } else {
             alert("Transcription failed: " + data.error);
