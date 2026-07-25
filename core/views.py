@@ -195,31 +195,38 @@ def history(request):
     return render(request, "core/history.html", {"entries": entries})
 
 
+@require_POST
 def transcribe_audio(request):
     """
     Receives an audio file, transcribes it using Whisper (with auto-language detection),
     and returns the text as JSON.
     """
-    if request.method == 'POST':
-        audio_file = request.FILES.get('audio_data')
-        
-        if not audio_file:
-            return JsonResponse({'error': 'No audio file provided'}, status=400)
+    audio_file = request.FILES.get('audio_data')
+    if not audio_file:
+        return JsonResponse({'error': 'No audio file provided.'}, status=400)
 
-        try:
-            client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+    content_type = getattr(audio_file, 'content_type', '') or ''
+    if not content_type.startswith('audio/'):
+        return JsonResponse({'error': 'Uploaded file must be an audio file.'}, status=400)
 
-            # Whisper automatically detects the spoken language
-            transcription = client.audio.transcriptions.create(
-                file=(audio_file.name, audio_file.read()),
-                model="whisper-large-v3",
-                response_format="json"
-            )
+    api_key = os.getenv("GROQ_API_KEY", "").strip()
+    if not api_key:
+        return JsonResponse({'error': 'Server is missing GROQ_API_KEY configuration.'}, status=503)
 
-            # Return successful transcription
-            return JsonResponse({'text': transcription.text})
-            
-        except Exception as e:
-            return JsonResponse({'error': f"Transcription API Error: {str(e)}"}, status=500)
+    try:
+        client = Groq(api_key=api_key)
 
-    return JsonResponse({'error': 'Invalid request method. POST required.'}, status=405)
+        # Whisper automatically detects the spoken language.
+        transcription = client.audio.transcriptions.create(
+            file=(audio_file.name, audio_file.read()),
+            model="whisper-large-v3",
+            response_format="json",
+        )
+
+        text = (getattr(transcription, 'text', '') or '').strip()
+        if not text:
+            return JsonResponse({'error': 'No speech detected in the uploaded audio.'}, status=422)
+
+        return JsonResponse({'text': text})
+    except Exception as exc:
+        return JsonResponse({'error': f'Transcription API Error: {exc}'}, status=502)
