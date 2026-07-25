@@ -2,15 +2,17 @@ import json
 import os
 from time import monotonic
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db import transaction
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from groq import Groq
 
-from .models import Translation
+from .models import Language, Translation
 from .services.mymemory import (
     MAX_QUERY_BYTES,
     TranslationQuotaError,
@@ -33,11 +35,21 @@ SUPPORTED_LANGUAGES = [
     {"code": "sw", "name": "Swahili"},
 ]
 SUPPORTED_LANGUAGE_CODES = {language["code"] for language in SUPPORTED_LANGUAGES}
+SUPPORTED_LANGUAGE_NAMES = {
+    language["code"]: language["name"] for language in SUPPORTED_LANGUAGES
+}
+
+
+def get_language(code):
+    language, _ = Language.objects.get_or_create(
+        code=code,
+        defaults={"name": SUPPORTED_LANGUAGE_NAMES[code]},
+    )
+    return language
 
 
 @login_required
 def history(request):
-
     query = request.GET.get("q", "").strip()
 
     translations = Translation.objects.filter(user=request.user).select_related(
@@ -55,27 +67,60 @@ def history(request):
     return render(
         request,
         "core/history.html",
-        {"page_obj": page_obj, "query": query},
+        {
+            "page_obj": page_obj,
+            "query": query,
+            "languages": SUPPORTED_LANGUAGES,
+        },
     )
 
 
 @login_required
+@require_POST
 def delete_history(request, id):
     translation = get_object_or_404(Translation, id=id, user=request.user)
     translation.delete()
-    return redirect("core/history.html")
+    messages.success(request, "Translation deleted.")
+    return redirect("history")
 
 
 @login_required
+@require_POST
 def clear_history(request):
     Translation.objects.filter(user=request.user).delete()
-    return redirect("core/history.html")
+    messages.success(request, "Translation history cleared.")
+    return redirect("history")
 
 
 @login_required
-def reload_translation(request, id):
+@require_POST
+def edit_history(request, id):
     translation = get_object_or_404(Translation, id=id, user=request.user)
-    return render(request, "translation.html", {"translation": translation})
+
+    source_text = request.POST.get("source_text", "").strip()
+    translated_text = request.POST.get("translated_text", "").strip()
+    source_lang_code = request.POST.get("source_lang", "")
+    target_lang_code = request.POST.get("target_lang", "")
+
+    if not source_text or not translated_text:
+        messages.error(request, "Original and translated text are required.")
+    elif (
+        source_lang_code not in SUPPORTED_LANGUAGE_CODES
+        or target_lang_code not in SUPPORTED_LANGUAGE_CODES
+    ):
+        messages.error(request, "Select supported source and target languages.")
+    elif source_lang_code == target_lang_code:
+        messages.error(request, "Source and target languages must be different.")
+    else:
+        with transaction.atomic():
+            translation.source_lang = get_language(source_lang_code)
+            translation.target_lang = get_language(target_lang_code)
+            translation.source_text = source_text
+            translation.translated_text = translated_text
+            translation.save()
+        messages.success(request, "Translation updated.")
+
+    return redirect("history")
 
 
 def home(request):
@@ -147,45 +192,31 @@ def translate_api(request):
         return JsonResponse({"error": str(exc)}, status=503)
 
     latency_ms = round((monotonic() - started_at) * 1000)
+    translation = None
+    if request.user.is_authenticated:
+        with transaction.atomic():
+            translation = Translation.objects.create(
+                user=request.user,
+                source_lang=get_language(source_lang),
+                target_lang=get_language(target_lang),
+                source_text=source_text,
+                translated_text=result.translated_text,
+                input_mode="text",
+                latency_ms=latency_ms,
+                was_successful=True,
+            )
+
     return JsonResponse(
         {
+            "translation_id": translation.id if translation else None,
             "translated_text": result.translated_text,
             "match": result.match,
             "latency_ms": latency_ms,
             "word_count": len(source_text.split()),
             "provider": "mymemory",
+            "saved": translation is not None,
         }
     )
-
-
-def history(request):
-    from django.shortcuts import render
-
-    entries = [
-        {
-            "source": "English",
-            "target": "French",
-            "text": "The report was approved this morning.",
-            "translation": "Le rapport a été approuvé ce matin.",
-            "time": "2 min ago",
-        },
-        {
-            "source": "Spanish",
-            "target": "English",
-            "text": "Necesitamos revisar los detalles finales.",
-            "translation": "We need to review the final details.",
-            "time": "14 min ago",
-        },
-        {
-            "source": "German",
-            "target": "English",
-            "text": "Bitte senden Sie die aktualisierte Version.",
-            "translation": "Please send the updated version.",
-            "time": "1 hour ago",
-        },
-    ]
-
-    return render(request, "core/history.html", {"entries": entries})
 
 
 def transcribe_audio(request):
