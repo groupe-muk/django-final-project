@@ -28,7 +28,7 @@ def history(request):
 
     return render(
         request,
-        "history.html",
+        "core/history.html",
         {"page_obj": page_obj, "query": query},
     )
 
@@ -37,13 +37,13 @@ def history(request):
 def delete_history(request, id):
     translation = get_object_or_404(Translation, id=id, user=request.user)
     translation.delete()
-    return redirect("history")
+    return redirect("core/history.html")
 
 
 @login_required
 def clear_history(request):
     Translation.objects.filter(user=request.user).delete()
-    return redirect("history")
+    return redirect("core/history.html")
 
 
 @login_required
@@ -61,35 +61,6 @@ def translator(request):
 
     return render(request, "core/translator.html")
 
-
-def history(request):
-    from django.shortcuts import render
-
-    entries = [
-        {
-            "source": "English",
-            "target": "French",
-            "text": "The report was approved this morning.",
-            "translation": "Le rapport a été approuvé ce matin.",
-            "time": "2 min ago",
-        },
-        {
-            "source": "Spanish",
-            "target": "English",
-            "text": "Necesitamos revisar los detalles finales.",
-            "translation": "We need to review the final details.",
-            "time": "14 min ago",
-        },
-        {
-            "source": "German",
-            "target": "English",
-            "text": "Bitte senden Sie die aktualisierte Version.",
-            "translation": "Please send the updated version.",
-            "time": "1 hour ago",
-        },
-    ]
-
-    return render(request, "core/history.html", {"entries": entries})
 
 
 def transcribe_audio(request):
