@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'images/logo.png' %}">
   {% block extra_head %}{% endblock %}
 </head>
 <body data-theme="dark" class="{% block body_class %}{% endblock %}">
@@ -16,7 +17,8 @@
     {% block topbar %}
     <header class="app-topbar">
       <a href="{% url 'home' %}" class="app-brand">
-        <span class="dot"></span> LinguaShift
+        <img src="{% static 'images/logo.png' %}" alt="LinguaShift" class="app-brand-logo">
+        <span>LinguaShift</span>
       </a>
 
       <nav class="app-nav">
