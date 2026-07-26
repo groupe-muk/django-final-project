@@ -156,11 +156,42 @@ Build and start the image with a local SQLite database:
 
 ```bash
 docker build -t linguashift .
-docker run --rm -p 8000:8000 \
-  -e DJANGO_SECRET_KEY=local-docker-secret \
-  -e DJANGO_DEBUG=True \
+
+docker run --rm --detach \
+  --name linguashift-local \
+  -p 8000:8000 \
+  -e DATABASE_URL=sqlite:////tmp/linguashift.sqlite3 \
+  -e DJANGO_SECRET_KEY=local-docker-secret-for-testing-only \
+  -e DJANGO_DEBUG=False \
+  -e DJANGO_SECURE_SSL_REDIRECT=False \
+  -e DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1 \
   linguashift
 ```
 
+Check the running application:
+
+```bash
+curl http://localhost:8000/health/
+curl --head http://localhost:8000/
+curl --head http://localhost:8000/static/styles.css
+docker logs linguashift-local
+```
+
+Run the Django test suite inside the built image:
+
+```bash
+docker run --rm \
+  --entrypoint python \
+  -e DATABASE_URL=sqlite:////tmp/linguashift-tests.sqlite3 \
+  linguashift manage.py test
+```
+
+Stop and remove the local container:
+
+```bash
+docker stop linguashift-local
+```
+
 Set `DATABASE_URL` to a PostgreSQL connection URL to exercise the same database
-configuration used on Render.
+configuration used on Render. Never put real Neon or Groq credentials in the
+Dockerfile, image, or committed files.
