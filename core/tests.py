@@ -22,6 +22,14 @@ class PageTests(SimpleTestCase):
         self.assertContains(response, "French")
 
 
+class HealthCheckTests(TestCase):
+    def test_health_check_reports_ready(self):
+        response = self.client.get(reverse("health"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), {"status": "ok"})
+
+
 class TranslationEndpointTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(

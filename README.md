@@ -114,3 +114,53 @@ cp .env.example .env
 The example enables local development on `localhost` and `127.0.0.1`. Add
 `GROQ_API_KEY` only when testing audio transcription. MyMemory works without an
 API key for the initial translation evaluation.
+
+## Deploy to Render with Docker
+
+The repository includes a production Docker image and a Render Blueprint. The
+Blueprint provisions:
+
+- a Docker-based Django web service;
+- a required `DATABASE_URL` environment variable for an external PostgreSQL
+  provider such as Neon;
+- a generated Django secret key;
+- a `/health/` readiness check.
+
+The container runs database migrations before starting Gunicorn. This supports
+Render's free web-service tier, where pre-deploy commands are unavailable.
+
+1. Push this repository to GitHub.
+2. In Render, open **Blueprints**, select **New Blueprint Instance**, and connect
+   the repository.
+3. Render detects `render.yaml`. Review the `linguashift` service, then apply
+   the Blueprint.
+4. Enter the pooled Neon PostgreSQL URL as `DATABASE_URL`, plus `GROQ_API_KEY`
+   and `MYMEMORY_CONTACT_EMAIL`, when Render prompts for environment values.
+5. Wait for `/health/` to report HTTP 200, then open the generated
+   `onrender.com` URL.
+
+For a custom domain, set `DJANGO_ALLOWED_HOSTS` to its hostname and set
+`DJANGO_CSRF_TRUSTED_ORIGINS` to its complete HTTPS origin. Multiple values are
+comma-separated. After confirming the domain is HTTPS-only, optionally set
+`DJANGO_SECURE_HSTS_SECONDS`; leave it at `0` while initially testing the
+deployment.
+
+The Blueprint uses Render's free web-service plan for demonstration. Free web
+services sleep after inactivity; change the service `plan` before using this as
+a production deployment. Database retention and limits are controlled by the
+selected Neon plan.
+
+### Run the production image locally
+
+Build and start the image with a local SQLite database:
+
+```bash
+docker build -t linguashift .
+docker run --rm -p 8000:8000 \
+  -e DJANGO_SECRET_KEY=local-docker-secret \
+  -e DJANGO_DEBUG=True \
+  linguashift
+```
+
+Set `DATABASE_URL` to a PostgreSQL connection URL to exercise the same database
+configuration used on Render.

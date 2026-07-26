@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: linguashift
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health/
+    autoDeployTrigger: commit
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: WEB_CONCURRENCY
+        value: "2"
+      - key: GROQ_API_KEY
+        sync: false
+      - key: MYMEMORY_CONTACT_EMAIL
+        sync: false
+      - key: MYMEMORY_BASE_URL
+        value: https://api.mymemory.translated.net
+      - key: MYMEMORY_TIMEOUT_SECONDS
+        value: "10"
