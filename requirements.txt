@@ -4,3 +4,6 @@ psycopg2-binary
 groq
 django-environ
 requests>=2.32,<3
+dj-database-url>=2.3,<3
+gunicorn>=23,<24
+whitenoise[brotli]>=6.8,<7

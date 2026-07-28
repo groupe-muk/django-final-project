@@ -5,11 +5,11 @@ from time import monotonic
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db import transaction
+from django.db import connection, transaction
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_GET, require_POST
 from groq import Groq
 
 from .models import Language, Translation
@@ -38,6 +38,15 @@ SUPPORTED_LANGUAGE_CODES = {language["code"] for language in SUPPORTED_LANGUAGES
 SUPPORTED_LANGUAGE_NAMES = {
     language["code"]: language["name"] for language in SUPPORTED_LANGUAGES
 }
+
+
+@require_GET
+def health(request):
+    try:
+        connection.ensure_connection()
+    except Exception:
+        return JsonResponse({"status": "unhealthy"}, status=503)
+    return JsonResponse({"status": "ok"})
 
 
 def get_language(code):
