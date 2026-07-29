@@ -131,14 +131,28 @@ def edit_history(request, id):
 
     return redirect("history")
 
+from django.shortcuts import render
+from .utils import get_country, get_client_ip
+
+COUNTRY_LANGUAGE = {
+    "UG": "en",
+    "KE": "sw",
+    "TZ": "sw",
+    "FR": "fr",
+}
 
 def home(request):
-    return render(
-        request,
-        "core/translator.html",
-        {"languages": SUPPORTED_LANGUAGES, "max_query_bytes": MAX_QUERY_BYTES},
-    )
+    if "language" not in request.session:
+        ip = get_client_ip(request)
+        country = get_country(ip)
 
+        language = COUNTRY_LANGUAGE.get(country, "en")
+        request.session["language"] = language
+
+    return render(request, "core/translator.html", {"languages":SUPPORTED_LANGUAGES, "max_query_bytes": MAX_QUERY_BYTES})
+
+
+   
 
 def translator(request):
     return render(
@@ -146,6 +160,16 @@ def translator(request):
         "core/translator.html",
         {"languages": SUPPORTED_LANGUAGES, "max_query_bytes": MAX_QUERY_BYTES},
     )
+
+def get_client_ip(request):
+    forwarded = request.META.get("HTTP_X_FORWARDED_FOR")
+
+    if forwarded:
+        ip = forwarded.split(",")[0]
+    else:
+        ip = request.META.get("REMOTE_ADDR")
+
+    return ip
 
 
 @require_POST
