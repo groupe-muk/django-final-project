@@ -50,6 +50,13 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = max(
     int(os.environ.get("DATA_UPLOAD_MAX_MEMORY_SIZE", str(2_621_440))),
 )
 
+# Powers best-effort IP -> country -> UI language detection (core/utils.py,
+# core/views.py). Get a free token at https://ipinfo.io; an empty token
+# still works against ipinfo's unauthenticated, rate-limited tier.
+IPINFO_BASE_URL = os.environ.get("IPINFO_BASE_URL", "https://ipinfo.io")
+IPINFO_TOKEN = os.environ.get("IPINFO_TOKEN", "")
+IPINFO_TIMEOUT_SECONDS = float(os.environ.get("IPINFO_TIMEOUT_SECONDS", "3"))
+
 allowed_hosts_value = os.environ.get(
     "DJANGO_ALLOWED_HOSTS",
     os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1"),
@@ -85,6 +92,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -105,6 +113,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.i18n",
             ],
         },
     },
@@ -131,7 +140,21 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = []
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
+
+# Languages the UI ships translations for. IP-based auto-detection
+# (see core/views.py) only ever resolves to a code in this list, and
+# anything else quietly falls back to English.
+LANGUAGES = [
+    ("en", "English"),
+    ("fr", "Français"),
+    ("de", "Deutsch"),
+    ("ru", "Русский"),
+    ("ar", "العربية"),
+    ("sw", "Kiswahili"),
+]
+
+LOCALE_PATHS = [BASE_DIR / "locale"]
 
 TIME_ZONE = "UTC"
 

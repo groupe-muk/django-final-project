@@ -1,14 +1,15 @@
 {% extends "core/base.html" %}
+{% load i18n %}
 
-{% block title %}Sign Up — LinguaShift{% endblock %}
-{% block page_heading %}Create Your Account{% endblock %}
-{% block page_subtitle %}Join LinguaShift for enterprise-grade translation.{% endblock %}
+{% block title %}{% trans "Sign Up" %} — LinguaShift{% endblock %}
+{% block page_heading %}{% trans "Create Your Account" %}{% endblock %}
+{% block page_subtitle %}{% trans "Join LinguaShift for enterprise-grade translation." %}{% endblock %}
 
-{% block hero_title %}Get Started{% endblock %}
-{% block hero_text %}It only takes a minute to set up your workspace.{% endblock %}
+{% block hero_title %}{% trans "Get Started" %}{% endblock %}
+{% block hero_text %}{% trans "It only takes a minute to set up your workspace." %}{% endblock %}
 
-{% block content_title %}Account{% endblock %}
-{% block content_subtitle %}Fill in the details below to register.{% endblock %}
+{% block content_title %}{% trans "Account" %}{% endblock %}
+{% block content_subtitle %}{% trans "Fill in the details below to register." %}{% endblock %}
 
 {% block content %}
 <form method="post" action="{% url 'register' %}">
@@ -27,10 +28,10 @@
     <ul class="errorlist">{% for e in form.non_field_errors %}<li>{{ e }}</li>{% endfor %}</ul>
   {% endif %}
 
-  <button type="submit" class="btn btn-primary btn-block mt-8">Create Account</button>
+  <button type="submit" class="btn btn-primary btn-block mt-8">{% trans "Create Account" %}</button>
 </form>
 
 <p class="auth-foot">
-  Already have an account? <a href="{% url 'login' %}">Log in</a>
+  {% trans "Already have an account?" %} <a href="{% url 'login' %}">{% trans "Log in" %}</a>
 </p>
 {% endblock %}

@@ -1,6 +1,8 @@
 import json
 from unittest.mock import Mock, patch
 
+import requests
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import SimpleTestCase, TestCase
 from django.urls import reverse
@@ -15,16 +17,107 @@ from core.services.chunking import chunk_text
 from core.services.document_export import build_download
 from core.services.document_extract import DocumentExtractError, extract_text
 from core.services.long_translate import translate_long_text
+from core.utils import get_country
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class PageTests(SimpleTestCase):
-    def test_home_status_and_languages(self):
+    @patch("core.views.get_country", return_value=None)
+    def test_home_status_and_languages(self, mock_get_country):
         response = self.client.get("/")
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "English")
         self.assertContains(response, "French")
+
+
+class LanguageDetectionTests(TestCase):
+    """Covers the IP -> country -> UI language auto-detect feature."""
+
+    def _language_cookie(self):
+        cookie = self.client.cookies.get(settings.LANGUAGE_COOKIE_NAME)
+        return cookie.value if cookie else None
+
+    @patch("core.views.get_country", return_value="FR")
+    def test_first_visit_activates_language_for_detected_country(self, mock_get_country):
+        response = self.client.get("/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self._language_cookie(), "fr")
+        # "Translator" nav link should render in French.
+        self.assertContains(response, "Traducteur")
+        mock_get_country.assert_called_once()
+
+    @patch("core.views.get_country", return_value=None)
+    def test_falls_back_to_default_language_when_country_unknown(self, mock_get_country):
+        response = self.client.get("/")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self._language_cookie(), "en")
+        self.assertContains(response, "Translator")
+
+    @patch("core.views.get_country", return_value="SA")
+    def test_arabic_speaking_country_gets_rtl_arabic_ui(self, mock_get_country):
+        response = self.client.get("/")
+
+        self.assertEqual(self._language_cookie(), "ar")
+        self.assertContains(response, 'dir="rtl"')
+        self.assertContains(response, "المترجم")  # "Translator" in Arabic
+
+    @patch("core.views.get_country", return_value="FR")
+    def test_detection_only_runs_once_per_visitor(self, mock_get_country):
+        self.client.get("/")
+        self.client.get("/")
+
+        mock_get_country.assert_called_once()
+
+    def test_manual_language_switcher_overrides_detection(self):
+        response = self.client.post(
+            reverse("set_language"),
+            {"language": "de", "next": "/"},
+        )
+
+        self.assertRedirects(response, "/")
+        self.assertEqual(self._language_cookie(), "de")
+
+        response = self.client.get("/")
+        self.assertContains(response, "Übersetzer")  # "Translator" in German
+
+
+class GetCountryUtilTests(SimpleTestCase):
+    def test_returns_none_for_local_ip_without_network_call(self):
+        with patch("core.utils.requests.get") as mock_get:
+            result = get_country("127.0.0.1")
+
+        self.assertIsNone(result)
+        mock_get.assert_not_called()
+
+    @patch("core.utils.requests.get")
+    def test_returns_country_from_successful_response(self, mock_get):
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.json.return_value = {"country": "DE"}
+        mock_get.return_value = response
+
+        result = get_country("8.8.8.8")
+
+        self.assertEqual(result, "DE")
+
+    @patch("core.utils.requests.get", side_effect=requests.exceptions.Timeout)
+    def test_returns_none_on_timeout(self, mock_get):
+        self.assertIsNone(get_country("8.8.8.8"))
+
+    @patch("core.utils.requests.get", side_effect=requests.exceptions.ConnectionError)
+    def test_returns_none_on_connection_error(self, mock_get):
+        self.assertIsNone(get_country("8.8.8.8"))
+
+    @patch("core.utils.requests.get")
+    def test_returns_none_on_bad_status(self, mock_get):
+        response = Mock()
+        response.raise_for_status.side_effect = requests.exceptions.HTTPError
+        mock_get.return_value = response
+
+        self.assertIsNone(get_country("8.8.8.8"))
 
 
 class HealthCheckTests(TestCase):

@@ -4,6 +4,7 @@ from io import BytesIO
 from pathlib import Path
 from time import monotonic
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -11,6 +12,8 @@ from django.db import connection, transaction
 from django.db.models import Q
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import translation as i18n
+from django.utils.translation import gettext as _
 from django.views.decorators.http import require_GET, require_POST
 from groq import Groq
 
@@ -28,6 +31,7 @@ from .services.mymemory import (
     TranslationServiceError,
     translate_text,
 )
+from .utils import get_client_ip, get_country
 
 
 SUPPORTED_LANGUAGES = [
@@ -112,7 +116,7 @@ def history(request):
 def delete_history(request, id):
     translation = get_object_or_404(Translation, id=id, user=request.user)
     translation.delete()
-    messages.success(request, "Translation deleted.")
+    messages.success(request, _("Translation deleted."))
     return redirect("history")
 
 
@@ -120,7 +124,7 @@ def delete_history(request, id):
 @require_POST
 def clear_history(request):
     Translation.objects.filter(user=request.user).delete()
-    messages.success(request, "Translation history cleared.")
+    messages.success(request, _("Translation history cleared."))
     return redirect("history")
 
 
@@ -142,16 +146,16 @@ def edit_history(request, id):
 
     if translation.is_document:
         if not translated_text:
-            messages.error(request, "Translated text is required.")
+            messages.error(request, _("Translated text is required."))
         elif not document_name:
-            messages.error(request, "Document name is required.")
+            messages.error(request, _("Document name is required."))
         elif (
             source_lang_code not in SUPPORTED_LANGUAGE_CODES
             or target_lang_code not in SUPPORTED_LANGUAGE_CODES
         ):
-            messages.error(request, "Select supported source and target languages.")
+            messages.error(request, _("Select supported source and target languages."))
         elif source_lang_code == target_lang_code:
-            messages.error(request, "Source and target languages must be different.")
+            messages.error(request, _("Source and target languages must be different."))
         else:
             with transaction.atomic():
                 translation.source_lang = get_language(source_lang_code)
@@ -161,16 +165,16 @@ def edit_history(request, id):
                 translation.translated_text = translated_text
                 translation.word_count = len(translated_text.split())
                 translation.save()
-            messages.success(request, "Document translation updated.")
+            messages.success(request, _("Document translation updated."))
     elif not source_text or not translated_text:
-        messages.error(request, "Original and translated text are required.")
+        messages.error(request, _("Original and translated text are required."))
     elif (
         source_lang_code not in SUPPORTED_LANGUAGE_CODES
         or target_lang_code not in SUPPORTED_LANGUAGE_CODES
     ):
-        messages.error(request, "Select supported source and target languages.")
+        messages.error(request, _("Select supported source and target languages."))
     elif source_lang_code == target_lang_code:
-        messages.error(request, "Source and target languages must be different.")
+        messages.error(request, _("Source and target languages must be different."))
     else:
         with transaction.atomic():
             translation.source_lang = get_language(source_lang_code)
@@ -178,9 +182,54 @@ def edit_history(request, id):
             translation.source_text = source_text
             translation.translated_text = translated_text
             translation.save()
-        messages.success(request, "Translation updated.")
+        messages.success(request, _("Translation updated."))
 
     return redirect("history")
+
+# Maps an ipinfo.io country code to one of the UI languages declared in
+# settings.LANGUAGES. Anything not listed here (or any lookup failure)
+# falls back to the default LANGUAGE_CODE.
+COUNTRY_LANGUAGE = {
+    # French-speaking
+    "FR": "fr",
+    "BE": "fr",
+    "CH": "fr",
+    "CA": "fr",
+    "SN": "fr",
+    "CI": "fr",
+    # German-speaking
+    "DE": "de",
+    "AT": "de",
+    "LI": "de",
+    # Russian-speaking
+    "RU": "ru",
+    "BY": "ru",
+    "KZ": "ru",
+    "KG": "ru",
+    # Arabic-speaking
+    "SA": "ar",
+    "AE": "ar",
+    "EG": "ar",
+    "MA": "ar",
+    "DZ": "ar",
+    "TN": "ar",
+    "IQ": "ar",
+    "JO": "ar",
+    "LB": "ar",
+    "LY": "ar",
+    "SY": "ar",
+    "YE": "ar",
+    "OM": "ar",
+    "QA": "ar",
+    "KW": "ar",
+    "BH": "ar",
+    "SD": "ar",
+    "PS": "ar",
+    # East Africa
+    "KE": "sw",
+    "TZ": "sw",
+    "UG": "en",
+}
 
 
 @login_required
@@ -190,7 +239,7 @@ def download_history_translation(request, id):
     translation = get_object_or_404(Translation, id=id, user=request.user)
     output_format = str(request.POST.get("output_format") or "docx").lower()
     if output_format not in SUPPORTED_OUTPUT_FORMATS:
-        messages.error(request, "Choose txt or docx as the download format.")
+        messages.error(request, _("Choose txt or docx as the download format."))
         return redirect("history")
 
     basename = "linguashift-translation"
@@ -216,11 +265,40 @@ def download_history_translation(request, id):
     )
 
 def home(request):
-    return render(
+    """Landing page. On a visitor's first request (no language cookie set
+    yet), best-effort detect their country from IP and activate the
+    matching UI language, persisting it in the same cookie Django's
+    built-in `set_language` view uses.
+
+    `LocaleMiddleware` reads that cookie on every later request
+    automatically, so detection only needs to run once per visitor.
+    """
+    detected_language = None
+    if settings.LANGUAGE_COOKIE_NAME not in request.COOKIES:
+        ip = get_client_ip(request)
+        country = get_country(ip)
+        detected_language = COUNTRY_LANGUAGE.get(country, i18n.get_language() or "en")
+        i18n.activate(detected_language)
+
+    response = render(
         request,
         "core/translator.html",
         {"languages": SUPPORTED_LANGUAGES, "max_query_bytes": MAX_QUERY_BYTES},
     )
+
+    if detected_language:
+        response.set_cookie(
+            settings.LANGUAGE_COOKIE_NAME,
+            detected_language,
+            max_age=settings.LANGUAGE_COOKIE_AGE,
+            path=settings.LANGUAGE_COOKIE_PATH,
+            domain=settings.LANGUAGE_COOKIE_DOMAIN,
+            secure=settings.LANGUAGE_COOKIE_SECURE,
+            httponly=settings.LANGUAGE_COOKIE_HTTPONLY,
+            samesite=settings.LANGUAGE_COOKIE_SAMESITE,
+        )
+
+    return response
 
 
 def translator(request):

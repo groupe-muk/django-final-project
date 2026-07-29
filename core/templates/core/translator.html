@@ -1,13 +1,13 @@
 {% extends "core/base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Translator — LinguaShift{% endblock %}
+{% block title %}{% trans "Translator" %} — LinguaShift{% endblock %}
 
 {% block page_area %}
 <section class="page-hero">
-  <h1 class="h-lg">Precise Translation</h1>
+  <h1 class="h-lg">{% trans "Precise Translation" %}</h1>
   <p class="body-lg text-muted">
-    Technical precision for global enterprise workflows. Powered by surgical-grade linguistic models.
+    {% trans "Technical precision for global enterprise workflows. Powered by surgical-grade linguistic models." %}
   </p>
 </section>
 
@@ -25,14 +25,14 @@
       <div class="glass-panel card" id="source-drop-zone">
         <div class="drop-zone-overlay" aria-hidden="true">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <p>Drop file to upload</p>
+          <p>{% trans "Drop file to upload" %}</p>
         </div>
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-8">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-cyan);">
               <circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
             </svg>
-            <select name="source_lang" id="source-lang" class="label-md" style="background:transparent;border:none;color:var(--color-on-surface);" aria-label="Source language">
+            <select name="source_lang" id="source-lang" class="label-md" style="background:transparent;border:none;color:var(--color-on-surface);" aria-label="{% trans 'Source language' %}">
               {% for lang in languages %}
                 <option value="{{ lang.code }}"{% if lang.code == "en" %} selected{% endif %}>{{ lang.name }}</option>
               {% endfor %}
@@ -40,8 +40,8 @@
           </div>
           <span id="detect-status" class="hint-text" aria-live="polite" style="color:var(--accent-cyan);font-weight:700;" hidden></span>
           <button type="button" id="source-hint-btn" class="hint-icon-btn tooltip-below tooltip-align-right tooltip-wide" tabindex="0"
-                  data-tooltip="Press Enter to translate (Shift+Enter for a new line). Drag &amp; drop or upload a PDF, DOCX, TXT, PNG, or JPG — max 1 MB; scanned PDFs limited to 3 pages."
-                  aria-label="Translator tips">
+                  data-tooltip="{% trans 'Press Enter to translate (Shift+Enter for a new line). Drag & drop or upload a PDF, DOCX, TXT, PNG, or JPG — max 1 MB; scanned PDFs limited to 3 pages.' %}"
+                  aria-label="{% trans 'Translator tips' %}">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="11"/><line x1="12" y1="8" x2="12.01" y2="8"/>
             </svg>
@@ -53,16 +53,16 @@
           name="source_text"
           class="textarea-panel textarea-autosize mt-16"
           rows="6"
-          placeholder="Type, paste, or drop a file to translate…"
+          placeholder="{% trans 'Type, paste, or drop a file to translate…' %}"
           aria-describedby="char-count input-hint-line"></textarea>
 
         <div class="flex items-center justify-between mt-16" style="border-top:1px solid var(--glass-border); padding-top:14px;">
-          <span class="hint-text" id="char-count">0 / {{ max_query_bytes }} bytes</span>
+          <span class="hint-text" id="char-count">0 / {{ max_query_bytes }} {% trans "bytes" %}</span>
           <div class="flex gap-12 translator-tool-actions">
-            <button type="button" id="mic-btn" class="icon-btn" data-tooltip="Record audio" aria-label="Record audio" onclick="toggleRecording()">
+            <button type="button" id="mic-btn" class="icon-btn" data-tooltip="{% trans 'Record audio' %}" aria-label="{% trans 'Record audio' %}" onclick="toggleRecording()">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg>
             </button>
-            <button type="button" id="upload-btn" class="icon-btn tooltip-align-right tooltip-wide" data-tooltip="Upload document — PDF, DOCX, TXT, PNG, or JPG (max 1 MB; scanned PDFs up to 3 pages)" aria-label="Upload document">
+            <button type="button" id="upload-btn" class="icon-btn tooltip-align-right tooltip-wide" data-tooltip="{% trans 'Upload document — PDF, DOCX, TXT, PNG, or JPG (max 1 MB; scanned PDFs up to 3 pages)' %}" aria-label="{% trans 'Upload document' %}">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
             </button>
             <input type="file" id="audio-file-input" accept="audio/*" style="display:none;" onchange="handleFileUpload(event)">
@@ -79,35 +79,35 @@
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent-cyan);">
               <path d="M5 8l6 6M4 14l6-6 2-3M2 5h12M7 2h1M22 22l-5-10-5 10M14 18h6"/>
             </svg>
-            <select name="target_lang" id="target-lang" class="label-md" style="background:transparent;border:none;color:var(--color-on-surface);" aria-label="Target language">
+            <select name="target_lang" id="target-lang" class="label-md" style="background:transparent;border:none;color:var(--color-on-surface);" aria-label="{% trans 'Target language' %}">
               {% for lang in languages %}
                 <option value="{{ lang.code }}"{% if lang.code == "fr" %} selected{% endif %}>{{ lang.name }}</option>
               {% endfor %}
             </select>
           </div>
-          <button type="button" id="copy-btn" class="icon-btn tooltip-below" data-tooltip="Copy translation" aria-label="Copy translation" onclick="copyTranslation()">
+          <button type="button" id="copy-btn" class="icon-btn tooltip-below" data-tooltip="{% trans 'Copy translation' %}" aria-label="{% trans 'Copy translation' %}" onclick="copyTranslation()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           </button>
         </div>
 
         <div id="output-copy" class="mt-16 output-panel" tabindex="-1" aria-live="polite">
-          <span id="output-placeholder">Translation will appear here...</span>
+          <span id="output-placeholder">{% trans "Translation will appear here..." %}</span>
         </div>
 
         <div class="flex items-center justify-between mt-16" style="border-top:1px solid var(--glass-border); padding-top:14px;">
           <div class="flex gap-12 translator-result-actions" style="flex-wrap:wrap;">
-            <button type="button" id="listen-btn" class="icon-btn" data-tooltip="Listen to translation" aria-label="Listen to translation" onclick="listenToTranslation()">
+            <button type="button" id="listen-btn" class="icon-btn" data-tooltip="{% trans 'Listen to translation' %}" aria-label="{% trans 'Listen to translation' %}" onclick="listenToTranslation()">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
             </button>
-            <button type="button" id="share-btn" class="icon-btn" data-tooltip="Share translation" aria-label="Share translation" onclick="shareTranslation()">
+            <button type="button" id="share-btn" class="icon-btn" data-tooltip="{% trans 'Share translation' %}" aria-label="{% trans 'Share translation' %}" onclick="shareTranslation()">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
             </button>
             <div id="document-download-actions" class="flex items-center gap-8" hidden>
-              <select id="download-format" class="hint-text download-format-select" aria-label="Download file format">
+              <select id="download-format" class="hint-text download-format-select" aria-label="{% trans 'Download file format' %}">
                 <option value="docx">DOCX</option>
                 <option value="txt">TXT</option>
               </select>
-              <button type="button" id="download-doc-btn" class="icon-btn icon-btn--accent" data-tooltip="Download translated document" aria-label="Download translated document">
+              <button type="button" id="download-doc-btn" class="icon-btn icon-btn--accent" data-tooltip="{% trans 'Download translated document' %}" aria-label="{% trans 'Download translated document' %}">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               </button>
             </div>
@@ -117,7 +117,7 @@
       </div>
     </div>
 
-    <button type="button" id="swap-langs-btn" class="swap-langs-btn" data-tooltip="Swap languages" aria-label="Swap source and target languages">
+    <button type="button" id="swap-langs-btn" class="swap-langs-btn" data-tooltip="{% trans 'Swap languages' %}" aria-label="{% trans 'Swap source and target languages' %}">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M7 16 3 12l4-4"/><path d="M3 12h13"/><path d="m17 8 4 4-4 4"/><path d="M21 12H8"/>
       </svg>
@@ -126,30 +126,30 @@
 
   <div style="text-align:center; margin-top:40px;">
     <button type="submit" class="btn btn-primary" id="translate-btn" disabled>
-      Translate Now
+      {% trans "Translate Now" %}
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.1L19 9l-5.4 1.9L12 16l-1.6-5.1L5 9l5.4-1.9L12 2zM19 13l.8 2.6L22 16l-2.2.8L19 19l-.8-2.2L16 16l2.2-.4L19 13z"/></svg>
     </button>
 
     <div id="document-progress" class="document-progress" hidden aria-live="polite" aria-busy="false">
       <div class="document-progress__row">
         <span class="document-progress__spinner" aria-hidden="true"></span>
-        <p class="document-progress__title" id="document-progress-title">Uploading document…</p>
+        <p class="document-progress__title" id="document-progress-title">{% trans "Uploading document…" %}</p>
         <span class="document-progress__meta" id="document-progress-elapsed">0s</span>
       </div>
-      <div class="document-progress__bar" role="progressbar" aria-label="Document processing progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" id="document-progress-bar">
+      <div class="document-progress__bar" role="progressbar" aria-label="{% trans 'Document processing progress' %}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="25" id="document-progress-bar">
         <span class="document-progress__bar-fill" id="document-progress-bar-fill"></span>
       </div>
     </div>
 
     <p id="translate-error" class="status-message status-message--error" role="alert" hidden></p>
     <p id="translate-success" class="status-message status-message--success" role="status" hidden>
-      Translation saved to your history.
+      {% trans "Translation saved to your history." %}
     </p>
     {% if not user.is_authenticated %}
       <p id="guest-history-nudge" class="status-message status-message--nudge" role="status" hidden>
-        Translation complete.
-        <a href="{% url 'login' %}?next={% url 'home' %}">Log in</a>
-        to save translations to your history.
+        {% trans "Translation complete." %}
+        <a href="{% url 'login' %}?next={% url 'home' %}">{% trans "Log in" %}</a>
+        {% trans "to save translations to your history." %}
       </p>
     {% endif %}
   </div>
@@ -161,7 +161,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
     </span>
     <div>
-      <div class="stat-label">Latency</div>
+      <div class="stat-label">{% trans "Latency" %}</div>
       <div class="stat-value" id="stat-latency">—</div>
     </div>
   </div>
@@ -170,7 +170,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
     </span>
     <div>
-      <div class="stat-label">Match</div>
+      <div class="stat-label">{% trans "Match" %}</div>
       <div class="stat-value" id="stat-accuracy">—</div>
     </div>
   </div>
@@ -179,7 +179,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
     </span>
     <div>
-      <div class="stat-label">Input Words</div>
+      <div class="stat-label">{% trans "Input Words" %}</div>
       <div class="stat-value" id="stat-words">0</div>
     </div>
   </div>
@@ -206,6 +206,30 @@
   const detectStatus = document.getElementById('detect-status');
   const maxQueryBytes = {{ max_query_bytes }};
   const byteLength = value => new TextEncoder().encode(value).length;
+  const i18nStrings = {
+    bytes: "{% trans 'bytes' %}",
+    enterText: "{% trans 'Enter text to translate.' %}",
+    byteLimit: "{% trans 'MyMemory accepts at most' %}",
+    bytesPerTranslation: "{% trans 'UTF-8 bytes per translation.' %}",
+    uploadLongerText: "{% trans 'Upload a document to translate longer text.' %}",
+    sameLanguage: "{% trans 'Source and target languages must be different.' %}",
+    detectedMatchesTarget: "{% trans 'which matches the target language. Choose a different target.' %}",
+    translating: "{% trans 'Translating...' %}",
+    detecting: "{% trans 'Detecting...' %}",
+    preparingDetector: "{% trans 'Preparing detector...' %}",
+    detectedPrefix: "{% trans 'Detected' %}",
+    autoDetectOption: "{% trans 'Auto-detect' %}",
+    translationFailed: "{% trans 'Translation failed.' %}",
+    serviceUnreachable: "{% trans 'Unable to reach the translation service.' %}",
+    translationSaved: "{% trans 'Translation saved to your history.' %}",
+    translationComplete: "{% trans 'Translation complete.' %}",
+    outputPlaceholder: "{% trans 'Translation will appear here...' %}",
+    selectSourceBeforeSwap: "{% trans 'Select a specific source language before swapping.' %}",
+    textExceedsLimit: "{% trans 'Text exceeds the' %}",
+    byteLimitSuffix: "{% trans '-byte limit.' %}",
+    uploadAsDocumentInstead: "{% trans 'Upload as a document instead' %}",
+    selectedPrefix: "{% trans 'Selected:' %}",
+  };
   const defaultTranslateLabel = translateButton.innerHTML;
   let isTranslating = false;
 
@@ -267,8 +291,8 @@
     }
     if (overLimit) {
       inputHintLine.innerHTML =
-        'Text exceeds the ' + maxQueryBytes + '-byte limit. ' +
-        '<button type="button" id="upload-instead-btn" class="text-link-btn">Upload as a document instead</button>';
+        i18nStrings.textExceedsLimit + ' ' + maxQueryBytes + i18nStrings.byteLimitSuffix + ' ' +
+        '<button type="button" id="upload-instead-btn" class="text-link-btn">' + i18nStrings.uploadAsDocumentInstead + '</button>';
       inputHintLine.style.color = '#ff8a8a';
       inputHintLine.hidden = false;
       const uploadInsteadBtn = document.getElementById('upload-instead-btn');
@@ -281,7 +305,7 @@
         });
       }
     } else if (selectedDocumentName) {
-      inputHintLine.textContent = 'Selected: ' + selectedDocumentName;
+      inputHintLine.textContent = i18nStrings.selectedPrefix + ' ' + selectedDocumentName;
       inputHintLine.style.color = 'var(--accent-cyan)';
       inputHintLine.hidden = false;
     } else {
@@ -350,7 +374,7 @@
       return;
     }
 
-    const autoOption = new Option('Auto-detect', AUTO_DETECT_VALUE, true, true);
+    const autoOption = new Option(i18nStrings.autoDetectOption, AUTO_DETECT_VALUE, true, true);
     sourceLangSelect.insertBefore(autoOption, sourceLangSelect.firstChild);
   })();
 
@@ -362,12 +386,12 @@
     }
 
     showDetectStatus('');
-    translateButton.textContent = 'Detecting...';
+    translateButton.textContent = i18nStrings.detecting;
 
     let detection;
     try {
       detection = await detectSourceLanguage(sourceText, supportedLanguageCodes, function (loaded) {
-        translateButton.textContent = 'Preparing detector... ' + Math.floor(loaded * 100) + '%';
+        translateButton.textContent = i18nStrings.preparingDetector + ' ' + Math.floor(loaded * 100) + '%';
       });
     } catch (error) {
       showError(error.message);
@@ -377,13 +401,13 @@
     // Show the user what was detected by moving the menu off "Auto-detect".
     sourceLangSelect.value = detection.code;
     autoDetectApplied = true;
-    showDetectStatus('Detected ' + (languageNames[detection.code] || detection.code));
+    showDetectStatus(i18nStrings.detectedPrefix + ' ' + (languageNames[detection.code] || detection.code));
     return detection.code;
   }
 
   function updateByteCount() {
     const bytes = byteLength(sourceInput.value);
-    charCount.textContent = bytes + ' / ' + maxQueryBytes + ' bytes';
+    charCount.textContent = bytes + ' / ' + maxQueryBytes + ' ' + i18nStrings.bytes;
     charCount.classList.toggle('is-over-limit', bytes > maxQueryBytes);
     charCount.style.color = bytes > maxQueryBytes ? '#ff8a8a' : '';
     autoResizeTextarea();
@@ -401,14 +425,13 @@
     const targetLang = targetLangSelect.value;
 
     if (!sourceText) {
-      showError('Enter text to translate.');
+      showError(i18nStrings.enterText);
       return;
     }
     if (byteLength(sourceText) > maxQueryBytes) {
       showError(
-        'MyMemory accepts at most ' +
-          maxQueryBytes +
-          ' UTF-8 bytes per translation. Upload a document to translate longer text.'
+        i18nStrings.byteLimit + ' ' + maxQueryBytes + ' ' +
+          i18nStrings.bytesPerTranslation + ' ' + i18nStrings.uploadLongerText
       );
       renderInputHint(true);
       return;
@@ -424,12 +447,12 @@
       }
       if (sourceLang === targetLang) {
         showError(autoDetectApplied
-          ? 'Detected ' + (languageNames[sourceLang] || sourceLang) + ', which matches the target language. Choose a different target.'
-          : 'Source and target languages must be different.');
+          ? i18nStrings.detectedPrefix + ' ' + (languageNames[sourceLang] || sourceLang) + ', ' + i18nStrings.detectedMatchesTarget
+          : i18nStrings.sameLanguage);
         return;
       }
 
-      translateButton.textContent = 'Translating...';
+      translateButton.textContent = i18nStrings.translating;
 
       const response = await fetch("{% url 'translate_api' %}", {
         method: 'POST',
@@ -445,7 +468,7 @@
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || 'Translation failed.');
+        throw new Error(data.error || i18nStrings.translationFailed);
       }
 
       output.textContent = data.translated_text;
@@ -459,16 +482,16 @@
       document.getElementById('stat-words').textContent = data.word_count;
 
       if (data.saved) {
-        showSuccess('Translation saved to your history.');
+        showSuccess(i18nStrings.translationSaved);
       } else if (guestNudge) {
         showGuestNudge();
       } else {
-        showSuccess('Translation complete.');
+        showSuccess(i18nStrings.translationComplete);
       }
 
       output.focus({ preventScroll: false });
     } catch (error) {
-      showError(error.message || 'Unable to reach the translation service.');
+      showError(error.message || i18nStrings.serviceUnreachable);
     } finally {
       isTranslating = false;
       translateButton.innerHTML = defaultTranslateLabel;
@@ -478,7 +501,7 @@
 
   function swapLanguages() {
     if (sourceLangSelect.value === AUTO_DETECT_VALUE) {
-      showError('Select a specific source language before swapping.');
+      showError(i18nStrings.selectSourceBeforeSwap);
       return;
     }
 
@@ -494,7 +517,7 @@
 
     if (previousOutput) {
       sourceInput.value = previousOutput;
-      output.innerHTML = '<span id="output-placeholder">Translation will appear here...</span>';
+      output.innerHTML = '<span id="output-placeholder">' + i18nStrings.outputPlaceholder + '</span>';
       output.style.color = 'var(--color-on-surface-variant)';
       if (typeof window.setDocumentDownloadVisible === 'function') {
         window.setDocumentDownloadVisible(false);

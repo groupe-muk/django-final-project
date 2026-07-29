@@ -360,7 +360,36 @@ Fallback Base (not actively used):
 
 ---
 
-## 14. KEY NAMING CONVENTIONS
+## 14. LANGUAGE DETECTION & SITE LOCALIZATION (i18n)
+
+Full details: [docs/language-detection.md](docs/language-detection.md).
+
+- **`core/utils.py`**: `get_client_ip(request)`, `get_country(ip)` — best-effort
+  IP → country lookup via ipinfo.io. Never raises; returns `None` on any
+  failure (timeout, network error, bad response, local/private IP).
+- **`core/views.py`**: `COUNTRY_LANGUAGE` dict (country code → language code)
+  and the detection logic inside `home(request)`. On first visit (no
+  `django_language` cookie yet), detects and activates a language, then sets
+  that cookie so `LocaleMiddleware` picks it up on every later request.
+  IMPORTANT: this Django version has no session-based language storage —
+  only the `django_language` cookie, `Accept-Language` header, or
+  `LANGUAGE_CODE` default. Don't reintroduce `request.session["language"]`.
+- **`project/settings.py`**: `LANGUAGES` (en, fr, de, ru, ar, sw),
+  `LOCALE_PATHS`, `IPINFO_TOKEN`/`IPINFO_BASE_URL`/`IPINFO_TIMEOUT_SECONDS`,
+  and `django.template.context_processors.i18n` added to `TEMPLATES`.
+- **`project/urls.py`**: `path("i18n/", include("django.conf.urls.i18n"))`
+  wires up Django's built-in `set_language` view (manual switcher in
+  `core/templates/core/base.html`'s top bar).
+- **`locale/<lang>/LC_MESSAGES/django.po` + `.mo`**: translated strings for
+  fr/de/ru/ar/sw. Regenerate with `manage.py makemessages -l <code>` after
+  adding `{% trans %}`/`gettext` calls, then `manage.py compilemessages`.
+- Arabic renders right-to-left automatically via
+  `dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}"` on `<html>` in
+  `base.html`.
+
+---
+
+## 15. KEY NAMING CONVENTIONS
 
 - **App name**: `core` (main), `accounts` (auth)
 - **Template namespacing**: Templates in `core/templates/core/` (prevents conflicts)

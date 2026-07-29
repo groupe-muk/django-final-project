@@ -133,6 +133,24 @@ The example enables local development on `localhost` and `127.0.0.1`. Add
 when testing scanned document OCR. MyMemory works without an API key for the
 initial translation evaluation.
 
+## Language Detection & Localization (i18n)
+
+On first visit, LinguaShift best-effort detects a visitor's country from
+their IP and switches the site UI (not the translation feature itself) into
+a matching language — French, German, Russian, Arabic (right-to-left), or
+Swahili, falling back to English. A manual language switcher in the top bar
+lets anyone override this, and doubles as the easiest way to test each
+language locally without spoofing your IP.
+
+See [docs/language-detection.md](docs/language-detection.md) for how
+detection works, the country → language mapping, how to add or edit
+translated strings, how to add a new language, and known limitations.
+
+```bash
+python manage.py makemessages -l fr -l de -l ru -l ar -l sw  # after adding new {% trans %} strings
+python manage.py compilemessages                              # after editing any locale/*/django.po
+```
+
 ## Deploy to Render with Docker
 
 The repository includes a production Docker image and a Render Blueprint. The
