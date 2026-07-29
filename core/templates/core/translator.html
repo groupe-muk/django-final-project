@@ -28,11 +28,8 @@
             {% endfor %}
           </select>
         </div>
-        <button type="button" id="auto-detect-btn" class="label-sm" disabled
-                title="MyMemory requires a selected source language."
-                style="background:transparent;border:none;color:var(--color-on-surface-variant);font-weight:700;">
-          Auto-Detect unavailable
-        </button>
+        <span id="detect-status" class="label-sm" aria-live="polite"
+              style="display:none;color:var(--accent-cyan);font-weight:700;"></span>
       </div>
 
       <textarea
@@ -139,6 +136,7 @@
 {% block extra_scripts %}
 <script src="{% static 'audio_handler.js' %}"></script>
 <script src="{% static 'output_actions.js' %}"></script>
+<script src="{% static 'language_detector.js' %}"></script>
 <script>
   const translateForm = document.getElementById('translate-form');
   const sourceInput = document.getElementById('source-text-input');
@@ -147,8 +145,18 @@
   const errorOutput = document.getElementById('translate-error');
   const successOutput = document.getElementById('translate-success');
   const translateButton = document.getElementById('translate-btn');
+  const sourceSelect = document.getElementById('source-lang');
+  const detectStatus = document.getElementById('detect-status');
   const maxQueryBytes = {{ max_query_bytes }};
   const byteLength = value => new TextEncoder().encode(value).length;
+
+  // Codes the server accepts, read straight off the menu so there is one source of truth.
+  const supportedLanguageCodes = Array.from(sourceSelect.options).map(option => option.value);
+  const languageNames = {};
+  Array.from(sourceSelect.options).forEach(option => { languageNames[option.value] = option.text; });
+
+  // True while the menu shows a language detection chose rather than one the user picked.
+  let autoDetectApplied = false;
 
   function updateByteCount() {
     const bytes = byteLength(sourceInput.value);
@@ -158,13 +166,71 @@
 
   sourceInput.addEventListener('input', updateByteCount);
 
+  function showDetectStatus(message) {
+    detectStatus.textContent = message;
+    detectStatus.style.display = message ? 'block' : 'none';
+  }
+
+  // Fall back to auto so the next translation re-detects instead of reusing a stale guess.
+  function clearAppliedDetection() {
+    if (!autoDetectApplied) {
+      return;
+    }
+    autoDetectApplied = false;
+    sourceSelect.value = AUTO_DETECT_VALUE;
+    showDetectStatus('');
+  }
+
+  sourceInput.addEventListener('input', clearAppliedDetection);
+  sourceSelect.addEventListener('change', function () {
+    autoDetectApplied = false;
+    showDetectStatus('');
+  });
+
+  // Offer auto-detect only where the browser can actually deliver it; elsewhere the option
+  // never appears and the page behaves exactly as it did before.
+  (async function initAutoDetect() {
+    if (await getDetectionAvailability(supportedLanguageCodes) === 'unavailable') {
+      return;
+    }
+
+    const autoOption = new Option('Auto-detect', AUTO_DETECT_VALUE, true, true);
+    sourceSelect.insertBefore(autoOption, sourceSelect.firstChild);
+  })();
+
+  // Resolves the source menu to a real language code, detecting first when set to auto.
+  // Returns null and reports the reason when detection cannot produce a usable answer.
+  async function resolveSourceLanguage(sourceText) {
+    if (sourceSelect.value !== AUTO_DETECT_VALUE) {
+      return sourceSelect.value;
+    }
+
+    showDetectStatus('');
+    translateButton.textContent = 'Detecting...';
+
+    let detection;
+    try {
+      detection = await detectSourceLanguage(sourceText, supportedLanguageCodes, function (loaded) {
+        translateButton.textContent = 'Preparing detector... ' + Math.floor(loaded * 100) + '%';
+      });
+    } catch (error) {
+      showError(error.message);
+      return null;
+    }
+
+    // Show the user what was detected by moving the menu off "Auto-detect".
+    sourceSelect.value = detection.code;
+    autoDetectApplied = true;
+    showDetectStatus('Detected ' + (languageNames[detection.code] || detection.code));
+    return detection.code;
+  }
+
   translateForm.addEventListener('submit', async function (event) {
     event.preventDefault();
     errorOutput.style.display = 'none';
     successOutput.style.display = 'none';
 
     const sourceText = sourceInput.value.trim();
-    const sourceLang = document.getElementById('source-lang').value;
     const targetLang = document.getElementById('target-lang').value;
 
     if (!sourceText) {
@@ -175,16 +241,24 @@
       showError('MyMemory accepts at most ' + maxQueryBytes + ' UTF-8 bytes per translation.');
       return;
     }
-    if (sourceLang === targetLang) {
-      showError('Source and target languages must be different.');
-      return;
-    }
 
     const originalButtonContent = translateButton.innerHTML;
     translateButton.disabled = true;
-    translateButton.textContent = 'Translating...';
 
     try {
+      const sourceLang = await resolveSourceLanguage(sourceText);
+      if (!sourceLang) {
+        return;
+      }
+      if (sourceLang === targetLang) {
+        showError(autoDetectApplied
+          ? 'Detected ' + (languageNames[sourceLang] || sourceLang) + ', which matches the target language. Choose a different target.'
+          : 'Source and target languages must be different.');
+        return;
+      }
+
+      translateButton.textContent = 'Translating...';
+
       const response = await fetch("{% url 'translate_api' %}", {
         method: 'POST',
         headers: {
