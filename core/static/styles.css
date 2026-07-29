@@ -384,6 +384,31 @@ body[data-theme="light"] .app-topbar {
   gap: 14px;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.language-switcher {
+  margin: 0;
+}
+
+.language-switcher select {
+  background: var(--color-surface-container-high);
+  border: 1px solid var(--glass-border);
+  color: var(--color-on-surface);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
 .icon-btn {
   display: inline-flex;
   align-items: center;

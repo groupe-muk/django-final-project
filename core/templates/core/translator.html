@@ -1,13 +1,13 @@
 {% extends "core/base.html" %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Translator — LinguaShift{% endblock %}
+{% block title %}{% trans "Translator" %} — LinguaShift{% endblock %}
 
 {% block page_area %}
 <section class="page-hero">
-  <h1 class="h-lg">Precise Translation</h1>
+  <h1 class="h-lg">{% trans "Precise Translation" %}</h1>
   <p class="body-lg text-muted">
-    Technical precision for global enterprise workflows. Powered by surgical-grade linguistic models.
+    {% trans "Technical precision for global enterprise workflows. Powered by surgical-grade linguistic models." %}
   </p>
 </section>
 
@@ -29,9 +29,9 @@
           </select>
         </div>
         <button type="button" id="auto-detect-btn" class="label-sm" disabled
-                title="MyMemory requires a selected source language."
+                title="{% trans 'MyMemory requires a selected source language.' %}"
                 style="background:transparent;border:none;color:var(--color-on-surface-variant);font-weight:700;">
-          Auto-Detect unavailable
+          {% trans "Auto-Detect unavailable" %}
         </button>
       </div>
 
@@ -39,15 +39,15 @@
         id="source-text-input"
         name="source_text"
         class="textarea-panel mt-16"
-        placeholder="Enter technical text or documentation for translation..."></textarea>
+        placeholder="{% trans 'Enter technical text or documentation for translation...' %}"></textarea>
 
       <div class="flex items-center justify-between mt-16" style="border-top:1px solid var(--glass-border); padding-top:14px;">
-        <span class="label-sm" id="char-count">0/{{ max_query_bytes }} bytes</span>
+        <span class="label-sm" id="char-count">0/{{ max_query_bytes }} {% trans "bytes" %}</span>
         <div class="flex gap-12">
-          <button type="button" id="mic-btn" class="icon-btn" title="Record audio" aria-label="Record audio" onclick="toggleRecording()">
+          <button type="button" id="mic-btn" class="icon-btn" title="{% trans 'Record audio' %}" aria-label="{% trans 'Record audio' %}" onclick="toggleRecording()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg>
           </button>
-          <button type="button" id="upload-btn" class="icon-btn" title="Upload document" aria-label="Upload document">
+          <button type="button" id="upload-btn" class="icon-btn" title="{% trans 'Upload document' %}" aria-label="{% trans 'Upload document' %}">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
           </button>
           <input type="file" id="audio-file-input" accept="audio/*" style="display:none;" onchange="handleFileUpload(event)">
@@ -68,24 +68,24 @@
             {% endfor %}
           </select>
         </div>
-        <button type="button" id="copy-btn" class="icon-btn" title="Copy translation" aria-label="Copy translation" onclick="copyTranslation()">
+        <button type="button" id="copy-btn" class="icon-btn" title="{% trans 'Copy translation' %}" aria-label="{% trans 'Copy translation' %}" onclick="copyTranslation()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         </button>
       </div>
 
       <div id="output-copy" class="mt-16" aria-live="polite" style="min-height:240px; color:var(--color-on-surface-variant);">
-        <span id="output-placeholder">Translation will appear here...</span>
+        <span id="output-placeholder">{% trans "Translation will appear here..." %}</span>
       </div>
 
       <div class="flex items-center justify-between mt-16" style="border-top:1px solid var(--glass-border); padding-top:14px;">
         <div class="flex gap-16">
           <button type="button" id="listen-btn" class="label-sm flex items-center gap-8" style="background:transparent;border:none;color:var(--color-on-surface-variant);" onclick="listenToTranslation()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            Listen
+            {% trans "Listen" %}
           </button>
           <button type="button" id="share-btn" class="label-sm flex items-center gap-8" style="background:transparent;border:none;color:var(--color-on-surface-variant);" onclick="shareTranslation()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-            Share
+            {% trans "Share" %}
           </button>
         </div>
         <span class="label-sm flex items-center gap-8"><span class="status-dot"></span>MyMemory API</span>
@@ -95,12 +95,12 @@
 
   <div style="text-align:center; margin-top:40px;">
     <button type="submit" class="btn btn-primary" id="translate-btn">
-      Translate Now
+      {% trans "Translate Now" %}
       <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.1L19 9l-5.4 1.9L12 16l-1.6-5.1L5 9l5.4-1.9L12 2zM19 13l.8 2.6L22 16l-2.2.8L19 19l-.8-2.2L16 16l2.2-.4L19 13z"/></svg>
     </button>
     <p id="translate-error" role="alert" style="display:none; color:#ff8a8a; margin-top:14px;"></p>
     <p id="translate-success" role="status" style="display:none; color:var(--accent-cyan); margin-top:14px;">
-      Translation saved to your history.
+      {% trans "Translation saved to your history." %}
     </p>
   </div>
 </form>
@@ -111,7 +111,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
     </span>
     <div>
-      <div class="stat-label">Latency</div>
+      <div class="stat-label">{% trans "Latency" %}</div>
       <div class="stat-value" id="stat-latency">—</div>
     </div>
   </div>
@@ -120,7 +120,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
     </span>
     <div>
-      <div class="stat-label">Match</div>
+      <div class="stat-label">{% trans "Match" %}</div>
       <div class="stat-value" id="stat-accuracy">—</div>
     </div>
   </div>
@@ -129,7 +129,7 @@
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
     </span>
     <div>
-      <div class="stat-label">Input Words</div>
+      <div class="stat-label">{% trans "Input Words" %}</div>
       <div class="stat-value" id="stat-words">0</div>
     </div>
   </div>
@@ -149,10 +149,20 @@
   const translateButton = document.getElementById('translate-btn');
   const maxQueryBytes = {{ max_query_bytes }};
   const byteLength = value => new TextEncoder().encode(value).length;
+  const i18nStrings = {
+    bytes: "{% trans 'bytes' %}",
+    enterText: "{% trans 'Enter text to translate.' %}",
+    byteLimit: "{% trans 'MyMemory accepts at most' %}",
+    bytesPerTranslation: "{% trans 'UTF-8 bytes per translation.' %}",
+    sameLanguage: "{% trans 'Source and target languages must be different.' %}",
+    translating: "{% trans 'Translating...' %}",
+    translationFailed: "{% trans 'Translation failed.' %}",
+    serviceUnreachable: "{% trans 'Unable to reach the translation service.' %}",
+  };
 
   function updateByteCount() {
     const bytes = byteLength(sourceInput.value);
-    charCount.textContent = bytes + '/' + maxQueryBytes + ' bytes';
+    charCount.textContent = bytes + '/' + maxQueryBytes + ' ' + i18nStrings.bytes;
     charCount.style.color = bytes > maxQueryBytes ? '#ff8a8a' : '';
   }
 
@@ -168,21 +178,21 @@
     const targetLang = document.getElementById('target-lang').value;
 
     if (!sourceText) {
-      showError('Enter text to translate.');
+      showError(i18nStrings.enterText);
       return;
     }
     if (byteLength(sourceText) > maxQueryBytes) {
-      showError('MyMemory accepts at most ' + maxQueryBytes + ' UTF-8 bytes per translation.');
+      showError(i18nStrings.byteLimit + ' ' + maxQueryBytes + ' ' + i18nStrings.bytesPerTranslation);
       return;
     }
     if (sourceLang === targetLang) {
-      showError('Source and target languages must be different.');
+      showError(i18nStrings.sameLanguage);
       return;
     }
 
     const originalButtonContent = translateButton.innerHTML;
     translateButton.disabled = true;
-    translateButton.textContent = 'Translating...';
+    translateButton.textContent = i18nStrings.translating;
 
     try {
       const response = await fetch("{% url 'translate_api' %}", {
@@ -199,7 +209,7 @@
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || 'Translation failed.');
+        throw new Error(data.error || i18nStrings.translationFailed);
       }
 
       output.textContent = data.translated_text;
@@ -210,7 +220,7 @@
       document.getElementById('stat-words').textContent = data.word_count;
       successOutput.style.display = data.saved ? 'block' : 'none';
     } catch (error) {
-      showError(error.message || 'Unable to reach the translation service.');
+      showError(error.message || i18nStrings.serviceUnreachable);
     } finally {
       translateButton.disabled = false;
       translateButton.innerHTML = originalButtonContent;
@@ -227,8 +237,9 @@
   });
 
   document.getElementById('copy-btn').addEventListener('click', function () {
+    const placeholder = document.getElementById('output-placeholder');
     const text = document.getElementById('output-copy').innerText;
-    if (text && text !== 'Translation will appear here...') {
+    if (text && !(placeholder && placeholder.isConnected)) {
       navigator.clipboard.writeText(text);
     }
   });

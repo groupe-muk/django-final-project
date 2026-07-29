@@ -13,7 +13,7 @@ def register(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
             login(request, user)
             return redirect("home")
         else:
-            return HttpResponse("Invalid form")
+            return render(request, "registration/register.html", {"form": form})
     else:
         form = UserCreationForm()
         return render(request, "registration/register.html", {"form" : form})

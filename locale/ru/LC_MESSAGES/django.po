@@ -1,0 +1,392 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: LinguaShift\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-29 18:46+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: LinguaShift\n"
+"Language-Team: LinguaShift\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+#: accounts/templates/registration/login.html:4
+#: accounts/templates/registration/login.html:36
+#: core/templates/core/base.html:64
+msgid "Log In"
+msgstr "Войти"
+
+#: accounts/templates/registration/login.html:5
+msgid "Welcome Back"
+msgstr "С возвращением"
+
+#: accounts/templates/registration/login.html:6
+msgid "Log in to continue your translation workflow."
+msgstr "Войдите, чтобы продолжить работу с переводами."
+
+#: accounts/templates/registration/login.html:8
+msgid "Sign In"
+msgstr "Вход"
+
+#: accounts/templates/registration/login.html:9
+msgid "Enter your credentials to access your dashboard."
+msgstr "Введите свои учётные данные для доступа к панели управления."
+
+#: accounts/templates/registration/login.html:11
+#: accounts/templates/registration/register.html:11
+msgid "Account"
+msgstr "Аккаунт"
+
+#: accounts/templates/registration/login.html:12
+msgid "Your data stays private and encrypted."
+msgstr "Ваши данные остаются приватными и зашифрованными."
+
+#: accounts/templates/registration/login.html:19
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: accounts/templates/registration/login.html:20
+msgid "Enter your username"
+msgstr "Введите имя пользователя"
+
+#: accounts/templates/registration/login.html:25
+msgid "Password"
+msgstr "Пароль"
+
+#: accounts/templates/registration/login.html:26
+msgid "Enter your password"
+msgstr "Введите пароль"
+
+#: accounts/templates/registration/login.html:40
+msgid "Don't have an account?"
+msgstr "Нет аккаунта?"
+
+#: accounts/templates/registration/login.html:40
+msgid "Sign up"
+msgstr "Зарегистрироваться"
+
+#: accounts/templates/registration/login.html:41
+msgid "Forgot your password?"
+msgstr "Забыли пароль?"
+
+#: accounts/templates/registration/register.html:4
+#: core/templates/core/base.html:65
+msgid "Sign Up"
+msgstr "Регистрация"
+
+#: accounts/templates/registration/register.html:5
+msgid "Create Your Account"
+msgstr "Создайте аккаунт"
+
+#: accounts/templates/registration/register.html:6
+msgid "Join LinguaShift for enterprise-grade translation."
+msgstr "Присоединяйтесь к LinguaShift для перевода корпоративного уровня."
+
+#: accounts/templates/registration/register.html:8
+msgid "Get Started"
+msgstr "Начать"
+
+#: accounts/templates/registration/register.html:9
+msgid "It only takes a minute to set up your workspace."
+msgstr "Настройка рабочего пространства займёт всего минуту."
+
+#: accounts/templates/registration/register.html:12
+msgid "Fill in the details below to register."
+msgstr "Заполните данные ниже, чтобы зарегистрироваться."
+
+#: accounts/templates/registration/register.html:31
+msgid "Create Account"
+msgstr "Создать аккаунт"
+
+#: accounts/templates/registration/register.html:35
+msgid "Already have an account?"
+msgstr "Уже есть аккаунт?"
+
+#: accounts/templates/registration/register.html:35
+msgid "Log in"
+msgstr "Войти"
+
+#: core/templates/core/base.html:25 core/templates/core/translator.html:4
+msgid "Translator"
+msgstr "Переводчик"
+
+#: core/templates/core/base.html:26 core/templates/core/history.html:4
+msgid "History Log"
+msgstr "История"
+
+#: core/templates/core/base.html:33 core/templates/core/base.html:34
+msgid "Language"
+msgstr "Язык"
+
+#: core/templates/core/base.html:43
+msgid "Toggle theme"
+msgstr "Переключить тему"
+
+#: core/templates/core/base.html:43
+msgid "Toggle light/dark theme"
+msgstr "Переключить светлую/тёмную тему"
+
+#: core/templates/core/base.html:50
+msgid "Settings"
+msgstr "Настройки"
+
+#: core/templates/core/base.html:56
+msgid "Change password"
+msgstr "Изменить пароль"
+
+#: core/templates/core/base.html:59
+msgid "Log out"
+msgstr "Выйти"
+
+#: core/templates/core/base.html:103
+msgid "Built for Enterprise Precision."
+msgstr "Создано для корпоративной точности."
+
+#: core/templates/core/base.html:105
+msgid "Privacy Policy"
+msgstr "Политика конфиденциальности"
+
+#: core/templates/core/base.html:106
+msgid "Terms of Service"
+msgstr "Условия использования"
+
+#: core/templates/core/base.html:107
+msgid "Security"
+msgstr "Безопасность"
+
+#: core/templates/core/base.html:108
+msgid "Support"
+msgstr "Поддержка"
+
+#: core/templates/core/history.html:57
+msgid "Translation History"
+msgstr "История переводов"
+
+#: core/templates/core/history.html:58
+msgid "Your saved translations can be searched, edited, or removed here."
+msgstr "Здесь можно искать, редактировать или удалять сохранённые переводы."
+
+#: core/templates/core/history.html:66
+msgid "Search history..."
+msgstr "Поиск по истории..."
+
+#: core/templates/core/history.html:67
+msgid "Search translation history"
+msgstr "Поиск по истории переводов"
+
+#: core/templates/core/history.html:70
+msgid "Clear all translation history? This cannot be undone."
+msgstr "Очистить всю историю переводов? Это действие необратимо."
+
+#: core/templates/core/history.html:74
+msgid "Clear All"
+msgstr "Очистить всё"
+
+#: core/templates/core/history.html:86 core/templates/core/history.html:96
+msgid "Language Pair"
+msgstr "Языковая пара"
+
+#: core/templates/core/history.html:87 core/templates/core/history.html:99
+msgid "Original Text"
+msgstr "Исходный текст"
+
+#: core/templates/core/history.html:88 core/templates/core/history.html:100
+msgid "Translated Text"
+msgstr "Переведённый текст"
+
+#: core/templates/core/history.html:89 core/templates/core/history.html:101
+msgid "Timestamp"
+msgstr "Дата и время"
+
+#: core/templates/core/history.html:90 core/templates/core/history.html:102
+msgid "Actions"
+msgstr "Действия"
+
+#: core/templates/core/history.html:104 core/templates/core/history.html:105
+msgid "Edit translation"
+msgstr "Редактировать перевод"
+
+#: core/templates/core/history.html:111
+msgid "Delete this translation?"
+msgstr "Удалить этот перевод?"
+
+#: core/templates/core/history.html:113
+msgid "Delete translation"
+msgstr "Удалить перевод"
+
+#: core/templates/core/history.html:125
+msgid "Language pair"
+msgstr "Языковая пара"
+
+#: core/templates/core/history.html:133
+msgid "Target language"
+msgstr "Язык перевода"
+
+#: core/templates/core/history.html:141
+msgid "Original text"
+msgstr "Исходный текст"
+
+#: core/templates/core/history.html:145
+msgid "Translated text"
+msgstr "Переведённый текст"
+
+#: core/templates/core/history.html:149
+msgid "Save"
+msgstr "Сохранить"
+
+#: core/templates/core/history.html:150
+msgid "Cancel"
+msgstr "Отмена"
+
+#: core/templates/core/history.html:159
+#, python-format
+msgid "No translations match \"%(query)s\"."
+msgstr "Нет переводов, соответствующих «%(query)s»."
+
+#: core/templates/core/history.html:161
+msgid "No translations yet. Head to the Translator to get started."
+msgstr "Переводов пока нет. Перейдите в раздел «Переводчик», чтобы начать."
+
+#: core/templates/core/history.html:173
+#, python-format
+msgid "Showing %(start)s–%(end)s of %(count_total)s entries"
+msgstr "Показано %(start)s–%(end)s из %(count_total)s записей"
+
+#: core/templates/core/history.html:176
+msgid "History pages"
+msgstr "Страницы истории"
+
+#: core/templates/core/history.html:178
+msgid "Previous page"
+msgstr "Предыдущая страница"
+
+#: core/templates/core/history.html:182
+msgid "Next page"
+msgstr "Следующая страница"
+
+#: core/templates/core/translator.html:8
+msgid "Precise Translation"
+msgstr "Точный перевод"
+
+#: core/templates/core/translator.html:10
+msgid ""
+"Technical precision for global enterprise workflows. Powered by surgical-"
+"grade linguistic models."
+msgstr "Техническая точность для глобальных корпоративных процессов. На основе высокоточных лингвистических моделей."
+
+#: core/templates/core/translator.html:32
+msgid "MyMemory requires a selected source language."
+msgstr "MyMemory требует выбранный исходный язык."
+
+#: core/templates/core/translator.html:34
+msgid "Auto-Detect unavailable"
+msgstr "Автоопределение недоступно"
+
+#: core/templates/core/translator.html:42
+msgid "Enter technical text or documentation for translation..."
+msgstr "Введите технический текст или документацию для перевода..."
+
+#: core/templates/core/translator.html:45
+#: core/templates/core/translator.html:153
+msgid "bytes"
+msgstr "байт"
+
+#: core/templates/core/translator.html:47
+msgid "Record audio"
+msgstr "Записать аудио"
+
+#: core/templates/core/translator.html:50
+msgid "Upload document"
+msgstr "Загрузить документ"
+
+#: core/templates/core/translator.html:71
+msgid "Copy translation"
+msgstr "Копировать перевод"
+
+#: core/templates/core/translator.html:77
+msgid "Translation will appear here..."
+msgstr "Перевод появится здесь..."
+
+#: core/templates/core/translator.html:84
+msgid "Listen"
+msgstr "Прослушать"
+
+#: core/templates/core/translator.html:88
+msgid "Share"
+msgstr "Поделиться"
+
+#: core/templates/core/translator.html:98
+msgid "Translate Now"
+msgstr "Перевести"
+
+#: core/templates/core/translator.html:103
+msgid "Translation saved to your history."
+msgstr "Перевод сохранён в вашей истории."
+
+#: core/templates/core/translator.html:114
+msgid "Latency"
+msgstr "Задержка"
+
+#: core/templates/core/translator.html:123
+msgid "Match"
+msgstr "Совпадение"
+
+#: core/templates/core/translator.html:132
+msgid "Input Words"
+msgstr "Слов на входе"
+
+#: core/templates/core/translator.html:154
+msgid "Enter text to translate."
+msgstr "Введите текст для перевода."
+
+#: core/templates/core/translator.html:155
+msgid "MyMemory accepts at most"
+msgstr "MyMemory принимает не более"
+
+#: core/templates/core/translator.html:156
+msgid "UTF-8 bytes per translation."
+msgstr "байт UTF-8 на один перевод."
+
+#: core/templates/core/translator.html:157 core/views.py:126
+msgid "Source and target languages must be different."
+msgstr "Исходный и целевой языки должны отличаться."
+
+#: core/templates/core/translator.html:158
+msgid "Translating..."
+msgstr "Перевод..."
+
+#: core/templates/core/translator.html:159
+msgid "Translation failed."
+msgstr "Не удалось выполнить перевод."
+
+#: core/templates/core/translator.html:160
+msgid "Unable to reach the translation service."
+msgstr "Не удалось подключиться к сервису перевода."
+
+#: core/views.py:96
+msgid "Translation deleted."
+msgstr "Перевод удалён."
+
+#: core/views.py:104
+msgid "Translation history cleared."
+msgstr "История переводов очищена."
+
+#: core/views.py:119
+msgid "Original and translated text are required."
+msgstr "Исходный и переведённый текст обязательны."
+
+#: core/views.py:124
+msgid "Select supported source and target languages."
+msgstr "Выберите поддерживаемые исходный и целевой языки."
+
+#: core/views.py:134
+msgid "Translation updated."
+msgstr "Перевод обновлён."
