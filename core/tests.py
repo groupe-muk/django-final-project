@@ -11,6 +11,11 @@ from core.services.mymemory import (
     TranslationResult,
     translate_text,
 )
+from core.services.chunking import chunk_text
+from core.services.document_export import build_download
+from core.services.document_extract import DocumentExtractError, extract_text
+from core.services.long_translate import translate_long_text
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 class PageTests(SimpleTestCase):
@@ -225,6 +230,24 @@ class TranslationHistoryTests(TestCase):
         self.assertEqual(response.status_code, 405)
         self.assertTrue(Translation.objects.filter(id=self.translation.id).exists())
 
+    def test_history_can_filter_by_document_mode(self):
+        Translation.objects.create(
+            user=self.user,
+            source_lang=self.english,
+            target_lang=self.french,
+            source_text="[Document] brief.pdf",
+            translated_text="Bonjour",
+            document_name="brief.pdf",
+            input_mode="document",
+            word_count=1,
+        )
+
+        response = self.client.get(reverse("history"), {"mode": "document"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "brief.pdf")
+        self.assertNotContains(response, "Hello")
+
 
 class MyMemoryClientTests(SimpleTestCase):
     @patch("core.services.mymemory.requests.get")
@@ -262,3 +285,166 @@ class MyMemoryClientTests(SimpleTestCase):
 
         with self.assertRaises(TranslationQuotaError):
             translate_text("Hello", "en", "fr")
+
+
+class ChunkingTests(SimpleTestCase):
+    def test_short_text_is_single_chunk(self):
+        self.assertEqual(chunk_text("Hello world"), ["Hello world"])
+
+    def test_chunks_respect_utf8_byte_limit(self):
+        # Each "日" is 3 UTF-8 bytes; 200 chars = 600 bytes.
+        text = "日" * 200
+        chunks = chunk_text(text, max_bytes=500)
+        self.assertGreater(len(chunks), 1)
+        for chunk in chunks:
+            self.assertLessEqual(len(chunk.encode("utf-8")), 500)
+
+
+class DocumentExportTests(SimpleTestCase):
+    def test_builds_txt_download(self):
+        download = build_download("Bonjour", "txt")
+        self.assertEqual(download.content, b"Bonjour")
+        self.assertTrue(download.filename.endswith(".txt"))
+
+    def test_builds_docx_download(self):
+        download = build_download("Bonjour", "docx")
+        self.assertTrue(download.content.startswith(b"PK"))
+        self.assertTrue(download.filename.endswith(".docx"))
+
+
+class DocumentExtractTests(SimpleTestCase):
+    def test_extracts_plain_text(self):
+        uploaded = SimpleUploadedFile("note.txt", b"Hello from a file")
+        self.assertEqual(extract_text(uploaded), "Hello from a file")
+
+    def test_rejects_unsupported_extension(self):
+        uploaded = SimpleUploadedFile("note.csv", b"a,b,c")
+        with self.assertRaises(DocumentExtractError):
+            extract_text(uploaded)
+
+    def test_rejects_oversize_upload(self):
+        oversized = SimpleUploadedFile("big.txt", b"x" * 2_000_000)
+        with self.assertRaises(DocumentExtractError) as ctx:
+            extract_text(oversized)
+        self.assertIn("too large", str(ctx.exception).lower())
+
+    @patch("core.services.document_extract.requests.post")
+    def test_extracts_image_via_ocr_space(self, mock_post):
+        provider = Mock()
+        provider.raise_for_status.return_value = None
+        provider.json.return_value = {
+            "IsErroredOnProcessing": False,
+            "ParsedResults": [{"ParsedText": "Hello from OCR"}],
+        }
+        mock_post.return_value = provider
+
+        with self.settings(OCR_SPACE_API_KEY="test-key"):
+            uploaded = SimpleUploadedFile(
+                "scan.png",
+                b"\x89PNG\r\n\x1a\nfake",
+                content_type="image/png",
+            )
+            self.assertEqual(extract_text(uploaded, source_lang="en"), "Hello from OCR")
+
+
+class DocumentTranslationEndpointTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="docs",
+            password="test-password",
+        )
+        self.client.force_login(self.user)
+
+    @patch("core.views.translate_long_text")
+    @patch("core.views.extract_text")
+    def test_translates_uploaded_document(self, mock_extract, mock_translate):
+        mock_extract.return_value = "Hello world from a document"
+        mock_translate.return_value = type(
+            "Result",
+            (),
+            {
+                "source_text": "Hello world from a document",
+                "translated_text": "Bonjour le monde depuis un document",
+                "match": 0.9,
+                "latency_ms": 120,
+                "chunk_count": 1,
+                "word_count": 5,
+            },
+        )()
+
+        response = self.client.post(
+            reverse("translate_document"),
+            {
+                "source_lang": "en",
+                "target_lang": "fr",
+                "document": SimpleUploadedFile("note.txt", b"Hello world from a document"),
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["translated_text"], "Bonjour le monde depuis un document")
+        self.assertEqual(payload["chunk_count"], 1)
+        self.assertTrue(payload["saved"])
+        saved = Translation.objects.get()
+        self.assertEqual(saved.input_mode, "document")
+        self.assertEqual(saved.document_name, "note.txt")
+        self.assertEqual(saved.source_text, "[Document] note.txt")
+        self.assertNotIn("Hello world from a document", saved.source_text)
+        self.assertEqual(saved.word_count, 5)
+
+    def test_history_shows_document_name_not_extracted_text(self):
+        english = Language.objects.create(code="en", name="English")
+        french = Language.objects.create(code="fr", name="French")
+        Translation.objects.create(
+            user=self.user,
+            source_lang=english,
+            target_lang=french,
+            source_text="[Document] report.pdf",
+            translated_text="Bonjour le rapport",
+            document_name="report.pdf",
+            input_mode="document",
+            word_count=3,
+        )
+
+        response = self.client.get(reverse("history"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "report.pdf")
+        self.assertContains(response, "Document")
+        self.assertContains(response, "English → French")
+        self.assertNotContains(response, "[Document] report.pdf")
+
+    def test_rejects_missing_document(self):
+        response = self.client.post(
+            reverse("translate_document"),
+            {"source_lang": "en", "target_lang": "fr"},
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_download_translation_returns_file(self):
+        response = self.client.post(
+            reverse("download_translation"),
+            data=json.dumps(
+                {"translated_text": "Bonjour", "output_format": "txt"}
+            ),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(b"".join(response.streaming_content), b"Bonjour")
+        self.assertIn("attachment", response["Content-Disposition"])
+
+
+class LongTranslateTests(SimpleTestCase):
+    @patch("core.services.long_translate.translate_text")
+    def test_translates_multiple_chunks(self, mock_translate):
+        mock_translate.side_effect = lambda text, *_args: TranslationResult(
+            translated_text=f"T({text[:8]})",
+            match=0.9,
+        )
+        long_text = "AAAA " * 40
+        result = translate_long_text(long_text, "en", "fr", max_bytes=40)
+        self.assertGreaterEqual(result.chunk_count, 2)
+        self.assertGreaterEqual(mock_translate.call_count, 2)
+        self.assertTrue(result.translated_text.startswith("T("))

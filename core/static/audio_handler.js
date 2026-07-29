@@ -13,7 +13,7 @@ function setMicButtonState(state) {
 
     if (state === 'recording') {
         micButton.classList.add('recording-active');
-        micButton.title = 'Stop recording';
+        micButton.setAttribute('data-tooltip', 'Stop recording');
         micButton.setAttribute('aria-label', 'Stop recording');
         micButton.disabled = false;
         return;
@@ -21,14 +21,14 @@ function setMicButtonState(state) {
 
     if (state === 'processing') {
         micButton.classList.remove('recording-active');
-        micButton.title = 'Processing recording...';
+        micButton.setAttribute('data-tooltip', 'Processing recording…');
         micButton.setAttribute('aria-label', 'Processing recording');
         micButton.disabled = true;
         return;
     }
 
     micButton.classList.remove('recording-active');
-    micButton.title = 'Record audio';
+    micButton.setAttribute('data-tooltip', 'Record audio');
     micButton.setAttribute('aria-label', 'Record audio');
     micButton.disabled = false;
 }
@@ -82,8 +82,13 @@ function setUploadButtonState(isProcessing) {
     if (!uploadButton) {
         return;
     }
+    // Document upload owns this button; leave it alone during audio processing.
+    const currentTooltip = uploadButton.getAttribute('data-tooltip') || '';
+    if (currentTooltip.toLowerCase().includes('document')) {
+        return;
+    }
     uploadButton.disabled = isProcessing;
-    uploadButton.title = isProcessing ? 'Processing upload...' : 'Upload audio';
+    uploadButton.setAttribute('data-tooltip', isProcessing ? 'Processing upload…' : 'Upload audio');
     uploadButton.setAttribute('aria-label', isProcessing ? 'Processing upload' : 'Upload audio');
 }
 

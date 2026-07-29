@@ -777,11 +777,304 @@ body[data-theme="light"] .auth-card select {
   font-size: var(--body-md-size);
   width: 100%;
 }
+.textarea-panel.textarea-autosize {
+  overflow-y: auto;
+  resize: none;
+  min-height: 160px;
+  max-height: 480px;
+}
 .textarea-panel:focus {
   outline: none;
 }
 .textarea-panel::placeholder {
   color: var(--color-on-surface-variant);
+}
+
+.translator-workspace {
+  position: relative;
+}
+
+.swap-langs-btn {
+  position: absolute;
+  left: 50%;
+  top: 42px;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: var(--color-surface-container-high);
+  color: var(--accent-cyan, #00f0ff);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+.swap-langs-btn:hover {
+  transform: translateX(-50%) scale(1.05);
+  box-shadow: 0 10px 28px rgba(0, 240, 255, 0.18);
+}
+.swap-langs-btn:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+.output-panel {
+  min-height: 160px;
+  color: var(--color-on-surface-variant);
+}
+
+/* ---------------------------------------------------------------------- */
+/* Drag-and-drop document upload                                          */
+/* ---------------------------------------------------------------------- */
+
+.drop-zone-overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+  border-radius: inherit;
+  border: 2px dashed var(--accent-cyan, #00f0ff);
+  background: rgba(0, 240, 255, 0.08);
+  color: var(--accent-cyan, #00f0ff);
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+}
+.drop-zone-overlay p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+#source-drop-zone.is-drag-over {
+  box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.45);
+}
+#source-drop-zone.is-drag-over .drop-zone-overlay {
+  display: flex;
+}
+
+.hint-text {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
+  line-height: 1.5;
+  color: var(--color-on-surface-variant);
+}
+
+.text-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--accent-cyan, #00f0ff);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.status-message {
+  margin-top: 14px;
+  font-size: 14px;
+}
+.status-message--error {
+  color: #ff8a8a;
+}
+.status-message--success {
+  color: var(--accent-cyan);
+}
+.status-message--nudge {
+  color: var(--color-on-surface-variant);
+}
+.status-message--nudge a {
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+.icon-btn--accent {
+  color: var(--accent-cyan);
+  border-color: rgba(0, 240, 255, 0.35);
+}
+.icon-btn--accent:hover {
+  color: var(--accent-cyan);
+  box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.5);
+}
+.icon-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Modern hint tooltips (replace native title tooltips)                   */
+/* ---------------------------------------------------------------------- */
+
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]::after,
+[data-tooltip]::before {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+  z-index: 60;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--color-surface-container-highest);
+  color: var(--color-on-surface);
+  border: 1px solid var(--glass-border-strong);
+  padding: 7px 11px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+[data-tooltip]::before {
+  content: "";
+  position: absolute;
+  bottom: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  border: 5px solid transparent;
+  border-top-color: var(--color-surface-container-highest);
+}
+[data-tooltip]:hover::after,
+[data-tooltip]:hover::before,
+[data-tooltip]:focus-visible::after,
+[data-tooltip]:focus-visible::before {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+[data-tooltip].tooltip-below::after {
+  bottom: auto;
+  top: calc(100% + 10px);
+}
+[data-tooltip].tooltip-below::before {
+  bottom: auto;
+  top: calc(100% + 5px);
+  border-top-color: transparent;
+  border-bottom-color: var(--color-surface-container-highest);
+}
+
+[data-tooltip].tooltip-align-right::after,
+[data-tooltip].tooltip-align-right::before {
+  left: auto;
+  right: 0;
+  transform: translateY(4px);
+}
+[data-tooltip].tooltip-align-right:hover::after,
+[data-tooltip].tooltip-align-right:hover::before,
+[data-tooltip].tooltip-align-right:focus-visible::after,
+[data-tooltip].tooltip-align-right:focus-visible::before {
+  transform: translateY(0);
+}
+[data-tooltip].tooltip-align-right::before {
+  right: 8px;
+}
+
+[data-tooltip].tooltip-wide::after {
+  white-space: normal;
+  width: 240px;
+  text-align: left;
+}
+
+/* Elements with their own explicit `position` must keep it; the generic
+   [data-tooltip] rule above only needs a positioning context, and
+   position: absolute already provides one. */
+.swap-langs-btn[data-tooltip] {
+  position: absolute;
+}
+
+@media (max-width: 640px) {
+  [data-tooltip]::after,
+  [data-tooltip]::before {
+    display: none;
+  }
+}
+
+.download-format-select {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  color: var(--color-on-surface);
+  border-radius: 6px;
+  padding: 2px 6px;
+  height: 36px;
+}
+
+.hint-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-full);
+  color: var(--color-on-surface-variant);
+  opacity: 0.7;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease;
+}
+.hint-icon-btn:hover,
+.hint-icon-btn:focus-visible {
+  opacity: 1;
+  color: var(--accent-cyan);
+}
+
+#copy-btn.is-copied {
+  color: var(--accent-cyan, #00f0ff);
+  box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.4);
+}
+
+#char-count.is-over-limit {
+  font-weight: 700;
+}
+
+#translate-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
+
+@media (max-width: 900px) {
+  .swap-langs-btn {
+    position: static;
+    transform: none;
+    margin: 12px auto 4px;
+    display: flex;
+  }
+  .swap-langs-btn:hover {
+    transform: scale(1.05);
+  }
+  .translator-tool-actions .icon-btn,
+  .translator-result-actions .icon-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
 }
 
 /* ---------------------------------------------------------------------- */
@@ -973,6 +1266,10 @@ ul.errorlist {
 /* 10. UTILITIES                                                          */
 /* ---------------------------------------------------------------------- */
 
+[hidden] {
+  display: none !important;
+}
+
 .flex {
   display: flex;
 }
@@ -1050,3 +1347,132 @@ ul.errorlist {
   border-color: rgba(0, 240, 255, 0.3);
   color: var(--accent-cyan);
 }
+
+/* ---------------------------------------------------------------------- */
+/* Document processing progress                                           */
+/* ---------------------------------------------------------------------- */
+
+.document-progress {
+  display: none;
+  margin: 20px auto 0;
+  max-width: 420px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 240, 255, 0.08),
+    rgba(87, 27, 193, 0.12)
+  );
+  box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.05);
+  text-align: left;
+}
+
+.document-progress.is-visible {
+  display: block;
+  animation: document-progress-in 220ms ease-out;
+}
+
+@keyframes document-progress-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.document-progress__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.document-progress__spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 240, 255, 0.25);
+  border-top-color: var(--accent-cyan, #00f0ff);
+  animation: document-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes document-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.document-progress__title {
+  margin: 0;
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-on-surface);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.document-progress__meta {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-cyan, #00f0ff);
+  white-space: nowrap;
+}
+
+.document-progress__bar {
+  margin-top: 10px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.document-progress__bar-fill {
+  display: block;
+  height: 100%;
+  width: 25%;
+  border-radius: 999px;
+  background: var(--accent-cyan, #00f0ff);
+  transition: width 0.4s ease;
+}
+
+body.document-processing #translate-form {
+  position: relative;
+}
+
+body.document-processing #translate-form::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(7, 13, 31, 0.28);
+  pointer-events: none;
+  z-index: 1;
+}
+
+body.document-processing #document-progress {
+  position: relative;
+  z-index: 2;
+}
+
+body.document-processing #upload-btn,
+body.document-processing #mic-btn,
+body.document-processing #translate-btn,
+body.document-processing #download-doc-btn,
+body.document-processing #source-lang,
+body.document-processing #target-lang,
+body.document-processing #download-format {
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+#upload-btn.is-processing {
+  color: var(--accent-cyan, #00f0ff);
+  box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.35);
+}
+

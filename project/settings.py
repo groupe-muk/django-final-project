@@ -31,6 +31,25 @@ MYMEMORY_TIMEOUT_SECONDS = float(
     os.environ.get("MYMEMORY_TIMEOUT_SECONDS", "10")
 )
 
+OCR_SPACE_API_KEY = os.environ.get("OCR_SPACE_API_KEY", "")
+OCR_SPACE_URL = os.environ.get(
+    "OCR_SPACE_URL", "https://api.ocr.space/parse/image"
+)
+OCR_SPACE_TIMEOUT_SECONDS = float(
+    os.environ.get("OCR_SPACE_TIMEOUT_SECONDS", "30")
+)
+DOCUMENT_MAX_UPLOAD_BYTES = int(
+    os.environ.get("DOCUMENT_MAX_UPLOAD_BYTES", str(1_048_576))
+)
+DOCUMENT_MAX_EXTRACT_BYTES = int(
+    os.environ.get("DOCUMENT_MAX_EXTRACT_BYTES", "10000")
+)
+DOCUMENT_MAX_PDF_PAGES = int(os.environ.get("DOCUMENT_MAX_PDF_PAGES", "3"))
+DATA_UPLOAD_MAX_MEMORY_SIZE = max(
+    DOCUMENT_MAX_UPLOAD_BYTES,
+    int(os.environ.get("DATA_UPLOAD_MAX_MEMORY_SIZE", str(2_621_440))),
+)
+
 allowed_hosts_value = os.environ.get(
     "DJANGO_ALLOWED_HOSTS",
     os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1"),
