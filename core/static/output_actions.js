@@ -12,6 +12,7 @@ function getTranslationOutputText() {
 
     return text;
 }
+window.getTranslationOutputText = getTranslationOutputText;
 
 function getTargetLanguageCode() {
     const targetSelect = document.getElementById('target-lang');
@@ -20,11 +21,22 @@ function getTargetLanguageCode() {
 
 function showOutputActionFeedback(message) {
     const successOutput = document.getElementById('translate-success');
+    const guestNudge = document.getElementById('guest-history-nudge');
+    const errorOutput = document.getElementById('translate-error');
+    if (guestNudge) {
+        guestNudge.hidden = true;
+    }
+    if (errorOutput) {
+        errorOutput.hidden = true;
+        errorOutput.style.display = 'none';
+    }
     if (successOutput) {
         successOutput.textContent = message;
+        successOutput.hidden = false;
         successOutput.style.display = 'block';
         window.clearTimeout(showOutputActionFeedback._timer);
         showOutputActionFeedback._timer = window.setTimeout(function () {
+            successOutput.hidden = true;
             successOutput.style.display = 'none';
         }, 1800);
         return;
@@ -59,6 +71,7 @@ function listenToTranslation() {
 // --- 2. COPY TO CLIPBOARD ---
 async function copyTranslation() {
     const textToCopy = getTranslationOutputText();
+    const copyButton = document.getElementById('copy-btn');
     
     if (!textToCopy) {
         alert("Nothing to copy!");
@@ -67,8 +80,16 @@ async function copyTranslation() {
 
     try {
         await navigator.clipboard.writeText(textToCopy);
-        
         showOutputActionFeedback("Translation copied to clipboard!");
+        if (copyButton) {
+            copyButton.classList.add('is-copied');
+            copyButton.setAttribute('data-tooltip', 'Copied!');
+            window.clearTimeout(copyTranslation._timer);
+            copyTranslation._timer = window.setTimeout(function () {
+                copyButton.classList.remove('is-copied');
+                copyButton.setAttribute('data-tooltip', 'Copy translation');
+            }, 1600);
+        }
     } catch (err) {
         console.error("Failed to copy text: ", err);
         alert("Failed to copy translation.");
