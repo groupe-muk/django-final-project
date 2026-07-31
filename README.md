@@ -95,6 +95,23 @@ fallback is a separately hosted FastAPI service backed by Argos Translate.
 See [docs/translation-architecture.md](docs/translation-architecture.md) for the
 API contract, configuration, test results, and migration plan.
 
+## Document translation
+
+Upload a PDF, DOCX, TXT, PNG, or JPG from the translator page. LinguaShift:
+
+1. Extracts text locally for TXT/DOCX/digital PDFs (`pypdf`, `python-docx`).
+2. Uses the free [OCR.space](https://ocr.space/ocrapi) API for images and scanned PDFs.
+3. Chunk-translates through MyMemory (500 UTF-8 byte segments).
+4. Lets you download the result as `.docx` or `.txt`.
+
+Free-tier limits to keep in mind:
+
+- OCR.space: about 1 MB per file, 3 PDF pages, and a daily request cap.
+- Extracted text is capped at `DOCUMENT_MAX_EXTRACT_BYTES` (default 10 000) before translation.
+
+Set `OCR_SPACE_API_KEY` in `.env` when testing scanned images/PDFs. Born-digital
+TXT/DOCX/PDF text extraction works without that key.
+
 Install the shared dependencies with either tool:
 
 ```bash
@@ -112,8 +129,27 @@ cp .env.example .env
 ```
 
 The example enables local development on `localhost` and `127.0.0.1`. Add
-`GROQ_API_KEY` only when testing audio transcription. MyMemory works without an
-API key for the initial translation evaluation.
+`GROQ_API_KEY` only when testing audio transcription. Add `OCR_SPACE_API_KEY`
+when testing scanned document OCR. MyMemory works without an API key for the
+initial translation evaluation.
+
+## Language Detection & Localization (i18n)
+
+On first visit, LinguaShift best-effort detects a visitor's country from
+their IP and switches the site UI (not the translation feature itself) into
+a matching language — French, German, Russian, Arabic (right-to-left), or
+Swahili, falling back to English. A manual language switcher in the top bar
+lets anyone override this, and doubles as the easiest way to test each
+language locally without spoofing your IP.
+
+See [docs/language-detection.md](docs/language-detection.md) for how
+detection works, the country → language mapping, how to add or edit
+translated strings, how to add a new language, and known limitations.
+
+```bash
+python manage.py makemessages -l fr -l de -l ru -l ar -l sw  # after adding new {% trans %} strings
+python manage.py compilemessages                              # after editing any locale/*/django.po
+```
 
 ## Deploy to Render with Docker
 

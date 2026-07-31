@@ -1,0 +1,539 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: LinguaShift\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-29 19:34+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: LinguaShift\n"
+"Language-Team: LinguaShift\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: accounts/templates/registration/login.html:4
+#: accounts/templates/registration/login.html:36
+#: core/templates/core/base.html:64
+msgid "Log In"
+msgstr "Anmelden"
+
+#: accounts/templates/registration/login.html:5
+msgid "Welcome Back"
+msgstr "Willkommen zurück"
+
+#: accounts/templates/registration/login.html:6
+msgid "Log in to continue your translation workflow."
+msgstr "Melden Sie sich an, um Ihren Übersetzungs-Workflow fortzusetzen."
+
+#: accounts/templates/registration/login.html:8
+msgid "Sign In"
+msgstr "Anmelden"
+
+#: accounts/templates/registration/login.html:9
+msgid "Enter your credentials to access your dashboard."
+msgstr "Geben Sie Ihre Zugangsdaten ein, um auf Ihr Dashboard zuzugreifen."
+
+#: accounts/templates/registration/login.html:11
+#: accounts/templates/registration/register.html:11
+msgid "Account"
+msgstr "Konto"
+
+#: accounts/templates/registration/login.html:12
+msgid "Your data stays private and encrypted."
+msgstr "Ihre Daten bleiben privat und verschlüsselt."
+
+#: accounts/templates/registration/login.html:19
+msgid "Username"
+msgstr "Benutzername"
+
+#: accounts/templates/registration/login.html:20
+msgid "Enter your username"
+msgstr "Geben Sie Ihren Benutzernamen ein"
+
+#: accounts/templates/registration/login.html:25
+msgid "Password"
+msgstr "Passwort"
+
+#: accounts/templates/registration/login.html:26
+msgid "Enter your password"
+msgstr "Geben Sie Ihr Passwort ein"
+
+#: accounts/templates/registration/login.html:40
+msgid "Don't have an account?"
+msgstr "Noch kein Konto?"
+
+#: accounts/templates/registration/login.html:40
+msgid "Sign up"
+msgstr "Registrieren"
+
+#: accounts/templates/registration/login.html:41
+msgid "Forgot your password?"
+msgstr "Passwort vergessen?"
+
+#: accounts/templates/registration/register.html:4
+#: core/templates/core/base.html:65
+msgid "Sign Up"
+msgstr "Registrieren"
+
+#: accounts/templates/registration/register.html:5
+msgid "Create Your Account"
+msgstr "Konto erstellen"
+
+#: accounts/templates/registration/register.html:6
+msgid "Join LinguaShift for enterprise-grade translation."
+msgstr "Treten Sie LinguaShift für professionelle Übersetzungen bei."
+
+#: accounts/templates/registration/register.html:8
+msgid "Get Started"
+msgstr "Loslegen"
+
+#: accounts/templates/registration/register.html:9
+msgid "It only takes a minute to set up your workspace."
+msgstr "Die Einrichtung Ihres Arbeitsbereichs dauert nur eine Minute."
+
+#: accounts/templates/registration/register.html:12
+msgid "Fill in the details below to register."
+msgstr "Füllen Sie die folgenden Angaben aus, um sich zu registrieren."
+
+#: accounts/templates/registration/register.html:31
+msgid "Create Account"
+msgstr "Konto erstellen"
+
+#: accounts/templates/registration/register.html:35
+msgid "Already have an account?"
+msgstr "Haben Sie bereits ein Konto?"
+
+#: accounts/templates/registration/register.html:35
+#: core/templates/core/translator.html:151
+msgid "Log in"
+msgstr "Anmelden"
+
+#: core/templates/core/base.html:25 core/templates/core/translator.html:4
+msgid "Translator"
+msgstr "Übersetzer"
+
+#: core/templates/core/base.html:26 core/templates/core/history.html:4
+msgid "History Log"
+msgstr "Verlauf"
+
+#: core/templates/core/base.html:33 core/templates/core/base.html:34
+msgid "Language"
+msgstr "Sprache"
+
+#: core/templates/core/base.html:43
+msgid "Toggle theme"
+msgstr "Design wechseln"
+
+#: core/templates/core/base.html:43
+msgid "Toggle light/dark theme"
+msgstr "Zwischen hellem/dunklem Design wechseln"
+
+#: core/templates/core/base.html:50
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: core/templates/core/base.html:56
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: core/templates/core/base.html:59
+msgid "Log out"
+msgstr "Abmelden"
+
+#: core/templates/core/base.html:103
+msgid "Built for Enterprise Precision."
+msgstr "Entwickelt für unternehmensweite Präzision."
+
+#: core/templates/core/base.html:105
+msgid "Privacy Policy"
+msgstr "Datenschutzrichtlinie"
+
+#: core/templates/core/base.html:106
+msgid "Terms of Service"
+msgstr "Nutzungsbedingungen"
+
+#: core/templates/core/base.html:107
+msgid "Security"
+msgstr "Sicherheit"
+
+#: core/templates/core/base.html:108
+msgid "Support"
+msgstr "Support"
+
+#: core/templates/core/history.html:105
+msgid "Translation History"
+msgstr "Übersetzungsverlauf"
+
+#: core/templates/core/history.html:106
+msgid "Your saved translations can be searched, edited, or removed here."
+msgstr "Ihre gespeicherten Übersetzungen können hier durchsucht, bearbeitet oder gelöscht werden."
+"Ihre gespeicherten Übersetzungen können hier durchsucht, bearbeitet oder "
+"entfernt werden."
+
+#: core/templates/core/history.html:109
+msgid "Filter by input type"
+msgstr "Nach Eingabetyp filtern"
+
+#: core/templates/core/history.html:110
+msgid "All"
+msgstr "Alle"
+
+#: core/templates/core/history.html:111
+msgid "Text"
+msgstr "Text"
+
+#: core/templates/core/history.html:112
+msgid "Voice"
+msgstr "Sprache"
+
+#: core/templates/core/history.html:113 core/templates/core/history.html:158
+#: core/templates/core/history.html:226
+msgid "Document"
+msgstr "Dokument"
+
+#: core/templates/core/history.html:121
+msgid "Search history..."
+msgstr "Verlauf durchsuchen..."
+
+#: core/templates/core/history.html:122
+msgid "Search translation history"
+msgstr "Übersetzungsverlauf durchsuchen"
+
+#: core/templates/core/history.html:125
+msgid "Clear all translation history? This cannot be undone."
+msgstr "Gesamten Übersetzungsverlauf löschen? Dies kann nicht rückgängig gemacht werden."
+"Gesamten Übersetzungsverlauf löschen? Dies kann nicht rückgängig gemacht "
+"werden."
+
+#: core/templates/core/history.html:129
+msgid "Clear All"
+msgstr "Alles löschen"
+
+#: core/templates/core/history.html:141 core/templates/core/history.html:151
+msgid "Language Pair"
+msgstr "Sprachpaar"
+
+#: core/templates/core/history.html:142 core/templates/core/history.html:155
+msgid "Source"
+msgstr "Quelle"
+
+#: core/templates/core/history.html:143 core/templates/core/history.html:168
+msgid "Translated"
+msgstr "Übersetzt"
+
+#: core/templates/core/history.html:144 core/templates/core/history.html:176
+msgid "Timestamp"
+msgstr "Zeitstempel"
+
+#: core/templates/core/history.html:145 core/templates/core/history.html:177
+msgid "Actions"
+msgstr "Aktionen"
+
+#: core/templates/core/history.html:170
+msgid "Translated file ready"
+msgstr "Übersetzte Datei bereit"
+
+#: core/templates/core/history.html:183 core/templates/core/translator.html:110
+msgid "Download translated document"
+msgstr "Übersetztes Dokument herunterladen"
+
+#: core/templates/core/history.html:188 core/templates/core/history.html:189
+msgid "Edit translation"
+msgstr "Übersetzung bearbeiten"
+
+#: core/templates/core/history.html:195
+msgid "Delete this translation?"
+msgstr "Diese Übersetzung löschen?"
+
+#: core/templates/core/history.html:197
+msgid "Delete translation"
+msgstr "Übersetzung löschen"
+
+#: core/templates/core/history.html:209
+msgid "Language pair"
+msgstr "Sprachpaar"
+
+#: core/templates/core/history.html:217 core/templates/core/translator.html:82
+msgid "Target language"
+msgstr "Zielsprache"
+
+#: core/templates/core/history.html:231
+msgid "Original text"
+msgstr "Originaltext"
+
+#: core/templates/core/history.html:236
+msgid "Translated text"
+msgstr "Übersetzter Text"
+
+#: core/templates/core/history.html:240
+msgid "Save"
+msgstr "Speichern"
+
+#: core/templates/core/history.html:241
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: core/templates/core/history.html:250
+#, python-format
+msgid "No translations match \"%(query)s\"."
+msgstr "Keine Übersetzungen entsprechen „%(query)s“."
+
+#: core/templates/core/history.html:252
+#, python-format
+msgid "No %(mode)s translations yet."
+msgstr "Noch keine %(mode)s-Übersetzungen."
+
+#: core/templates/core/history.html:254
+msgid "No translations yet. Head to the Translator to get started."
+msgstr "Noch keine Übersetzungen. Gehen Sie zum Übersetzer, um loszulegen."
+
+#: core/templates/core/history.html:266
+#, python-format
+msgid "Showing %(start)s–%(end)s of %(count_total)s entries"
+msgstr "Zeige %(start)s–%(end)s von %(count_total)s Einträgen"
+
+#: core/templates/core/history.html:269
+msgid "History pages"
+msgstr "Verlaufsseiten"
+
+#: core/templates/core/history.html:271
+msgid "Previous page"
+msgstr "Vorherige Seite"
+
+#: core/templates/core/history.html:275
+msgid "Next page"
+msgstr "Nächste Seite"
+
+#: core/templates/core/translator.html:8
+msgid "Precise Translation"
+msgstr "Präzise Übersetzung"
+
+#: core/templates/core/translator.html:10
+msgid ""
+"Technical precision for global enterprise workflows. Powered by surgical-"
+"grade linguistic models."
+msgstr ""
+"Technische Präzision für globale Unternehmens-Workflows. Angetrieben von "
+"hochpräzisen Sprachmodellen."
+
+#: core/templates/core/translator.html:28
+msgid "Drop file to upload"
+msgstr "Datei zum Hochladen hier ablegen"
+
+#: core/templates/core/translator.html:35
+msgid "Source language"
+msgstr "Ausgangssprache"
+
+#: core/templates/core/translator.html:43
+msgid ""
+"Press Enter to translate (Shift+Enter for a new line). Drag & drop or upload "
+"a PDF, DOCX, TXT, PNG, or JPG — max 1 MB; scanned PDFs limited to 3 pages."
+msgstr ""
+
+#: core/templates/core/translator.html:44
+msgid "Translator tips"
+msgstr "Übersetzer-Tipps"
+
+#: core/templates/core/translator.html:56
+msgid "Type, paste, or drop a file to translate…"
+msgstr "Zum Übersetzen tippen, einfügen oder eine Datei ablegen…"
+
+#: core/templates/core/translator.html:60
+#: core/templates/core/translator.html:210
+msgid "bytes"
+msgstr "Bytes"
+
+#: core/templates/core/translator.html:62
+msgid "Record audio"
+msgstr "Audio aufnehmen"
+
+#: core/templates/core/translator.html:65
+msgid ""
+"Upload document — PDF, DOCX, TXT, PNG, or JPG (max 1 MB; scanned PDFs up to "
+"3 pages)"
+msgstr ""
+
+#: core/templates/core/translator.html:65
+msgid "Upload document"
+msgstr "Dokument hochladen"
+
+#: core/templates/core/translator.html:88
+msgid "Copy translation"
+msgstr "Übersetzung kopieren"
+
+#: core/templates/core/translator.html:94
+#: core/templates/core/translator.html:226
+msgid "Translation will appear here..."
+msgstr "Die Übersetzung erscheint hier..."
+
+#: core/templates/core/translator.html:99
+msgid "Listen to translation"
+msgstr "Übersetzung anhören"
+
+#: core/templates/core/translator.html:102
+msgid "Share translation"
+msgstr "Übersetzung teilen"
+
+#: core/templates/core/translator.html:106
+msgid "Download file format"
+msgstr "Dateiformat für den Download"
+
+#: core/templates/core/translator.html:120
+msgid "Swap languages"
+msgstr "Sprachen tauschen"
+
+#: core/templates/core/translator.html:120
+msgid "Swap source and target languages"
+msgstr "Ausgangs- und Zielsprache tauschen"
+
+#: core/templates/core/translator.html:129
+msgid "Translate Now"
+msgstr "Jetzt übersetzen"
+
+#: core/templates/core/translator.html:136
+msgid "Uploading document…"
+msgstr "Dokument wird hochgeladen…"
+
+#: core/templates/core/translator.html:139
+msgid "Document processing progress"
+msgstr "Fortschritt der Dokumentverarbeitung"
+
+#: core/templates/core/translator.html:146
+#: core/templates/core/translator.html:224
+msgid "Translation saved to your history."
+msgstr "Übersetzung in Ihrem Verlauf gespeichert."
+
+#: core/templates/core/translator.html:150
+#: core/templates/core/translator.html:225
+msgid "Translation complete."
+msgstr "Übersetzung abgeschlossen."
+
+#: core/templates/core/translator.html:152
+msgid "to save translations to your history."
+msgstr "um Übersetzungen in Ihrem Verlauf zu speichern."
+
+#: core/templates/core/translator.html:164
+msgid "Latency"
+msgstr "Latenz"
+
+#: core/templates/core/translator.html:173
+msgid "Match"
+msgstr "Übereinstimmung"
+
+#: core/templates/core/translator.html:182
+msgid "Input Words"
+msgstr "Eingabewörter"
+
+#: core/templates/core/translator.html:211
+msgid "Enter text to translate."
+msgstr "Geben Sie einen Text zum Übersetzen ein."
+
+#: core/templates/core/translator.html:212
+msgid "MyMemory accepts at most"
+msgstr "MyMemory akzeptiert höchstens"
+
+#: core/templates/core/translator.html:213
+msgid "UTF-8 bytes per translation."
+msgstr "UTF-8-Bytes pro Übersetzung."
+
+#: core/templates/core/translator.html:214
+msgid "Upload a document to translate longer text."
+msgstr "Laden Sie ein Dokument hoch, um längeren Text zu übersetzen."
+
+#: core/templates/core/translator.html:215 core/views.py:158 core/views.py:177
+msgid "Source and target languages must be different."
+msgstr "Ausgangs- und Zielsprache müssen unterschiedlich sein."
+
+#: core/templates/core/translator.html:216
+msgid "which matches the target language. Choose a different target."
+msgstr "was der Zielsprache entspricht. Wählen Sie ein anderes Ziel."
+
+#: core/templates/core/translator.html:217
+msgid "Translating..."
+msgstr "Wird übersetzt..."
+
+#: core/templates/core/translator.html:218
+msgid "Detecting..."
+msgstr "Erkennung..."
+
+#: core/templates/core/translator.html:219
+msgid "Preparing detector..."
+msgstr "Detektor wird vorbereitet..."
+
+#: core/templates/core/translator.html:220
+msgid "Detected"
+msgstr "Erkannt"
+
+#: core/templates/core/translator.html:221
+msgid "Auto-detect"
+msgstr "Automatisch erkennen"
+
+#: core/templates/core/translator.html:222
+msgid "Translation failed."
+msgstr "Übersetzung fehlgeschlagen."
+
+#: core/templates/core/translator.html:223
+msgid "Unable to reach the translation service."
+msgstr "Der Übersetzungsdienst ist nicht erreichbar."
+
+#: core/templates/core/translator.html:227
+msgid "Select a specific source language before swapping."
+msgstr "Wählen Sie eine bestimmte Ausgangssprache, bevor Sie tauschen."
+
+#: core/templates/core/translator.html:228
+msgid "Text exceeds the"
+msgstr "Der Text überschreitet das Limit von"
+
+#: core/templates/core/translator.html:229
+msgid "-byte limit."
+msgstr "Byte."
+
+#: core/templates/core/translator.html:230
+msgid "Upload as a document instead"
+msgstr "Stattdessen ein Dokument hochladen"
+
+#: core/templates/core/translator.html:231
+msgid "Selected:"
+msgstr "Ausgewählt:"
+
+#: core/views.py:119
+msgid "Translation deleted."
+msgstr "Übersetzung gelöscht."
+
+#: core/views.py:127
+msgid "Translation history cleared."
+msgstr "Übersetzungsverlauf gelöscht."
+
+#: core/views.py:149
+msgid "Translated text is required."
+msgstr "Der übersetzte Text ist erforderlich."
+
+#: core/views.py:151
+msgid "Document name is required."
+msgstr "Der Dokumentname ist erforderlich."
+
+#: core/views.py:156 core/views.py:175
+msgid "Select supported source and target languages."
+msgstr "Wählen Sie unterstützte Ausgangs- und Zielsprachen aus."
+
+#: core/views.py:168
+msgid "Document translation updated."
+msgstr "Dokumentübersetzung aktualisiert."
+
+#: core/views.py:170
+msgid "Original and translated text are required."
+msgstr "Original- und übersetzter Text sind erforderlich."
+
+#: core/views.py:185
+msgid "Translation updated."
+msgstr "Übersetzung aktualisiert."
+
+#: core/views.py:242
+msgid "Choose txt or docx as the download format."
+msgstr "Wählen Sie txt oder docx als Downloadformat."

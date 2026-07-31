@@ -1,6 +1,6 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE }}" dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,34 +22,47 @@
       </a>
 
       <nav class="app-nav">
-        <a href="{% url 'translator' %}" class="nav-link {% if request.resolver_match.url_name == 'translator' or request.resolver_match.url_name == 'home' %}active{% endif %}">Translator</a>
-        <a href="{% url 'history' %}" class="nav-link {% if request.resolver_match.url_name == 'history' %}active{% endif %}">History Log</a>
+        <a href="{% url 'translator' %}" class="nav-link {% if request.resolver_match.url_name == 'translator' or request.resolver_match.url_name == 'home' %}active{% endif %}">{% trans "Translator" %}</a>
+        <a href="{% url 'history' %}" class="nav-link {% if request.resolver_match.url_name == 'history' %}active{% endif %}">{% trans "History Log" %}</a>
       </nav>
 
       <div class="app-actions">
-        <button type="button" class="icon-btn" id="theme-toggle" title="Toggle theme" aria-label="Toggle light/dark theme">
+        <form action="{% url 'set_language' %}" method="post" class="language-switcher">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <label for="language-switcher-select" class="sr-only">{% trans "Language" %}</label>
+          <select name="language" id="language-switcher-select" class="label-sm" onchange="this.form.submit()" aria-label="{% trans 'Language' %}">
+            {% get_current_language as CURRENT_LANGUAGE %}
+            {% get_available_languages as AVAILABLE_LANGUAGES %}
+            {% for code, name in AVAILABLE_LANGUAGES %}
+              <option value="{{ code }}"{% if code == CURRENT_LANGUAGE %} selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </form>
+
+        <button type="button" class="icon-btn" id="theme-toggle" title="{% trans 'Toggle theme' %}" aria-label="{% trans 'Toggle light/dark theme' %}">
           <svg id="theme-icon-dark" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
           <svg id="theme-icon-light" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
         </button>
 
         {% if user.is_authenticated %}
           <div class="user-menu" id="user-menu">
-            <button type="button" class="icon-btn" id="settings-toggle" title="Settings" aria-label="Settings">
+            <button type="button" class="icon-btn" id="settings-toggle" title="{% trans 'Settings' %}" aria-label="{% trans 'Settings' %}">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
             </button>
             <div class="avatar-fallback">{{ user.username|first|upper }}</div>
             <div class="user-menu-dropdown">
               <span class="label-sm" style="display:block;padding:8px 10px;color:var(--color-on-surface);">{{ user.username }}</span>
-              <a href="{% url 'password_change' %}">Change password</a>
+              <a href="{% url 'password_change' %}">{% trans "Change password" %}</a>
               <form action="{% url 'logout' %}" method="post" style="margin:0;">
                 {% csrf_token %}
-                <button type="submit">Log out</button>
+                <button type="submit">{% trans "Log out" %}</button>
               </form>
             </div>
           </div>
         {% else %}
-          <a href="{% url 'login' %}" class="btn btn-secondary" style="padding:8px 18px;">Log In</a>
-          <a href="{% url 'register' %}" class="btn btn-primary" style="padding:8px 18px;">Sign Up</a>
+          <a href="{% url 'login' %}" class="btn btn-secondary" style="padding:8px 18px;">{% trans "Log In" %}</a>
+          <a href="{% url 'register' %}" class="btn btn-primary" style="padding:8px 18px;">{% trans "Sign Up" %}</a>
         {% endif %}
       </div>
     </header>
@@ -87,12 +100,12 @@
     </main>
 
     <footer class="app-footer">
-      <span>&copy; 2024 LinguaShift Professional. Built for Enterprise Precision.</span>
+      <span>&copy; 2024 LinguaShift Professional. {% trans "Built for Enterprise Precision." %}</span>
       <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Security</a>
-        <a href="#">Support</a>
+        <a href="#">{% trans "Privacy Policy" %}</a>
+        <a href="#">{% trans "Terms of Service" %}</a>
+        <a href="#">{% trans "Security" %}</a>
+        <a href="#">{% trans "Support" %}</a>
       </div>
     </footer>
   </div>

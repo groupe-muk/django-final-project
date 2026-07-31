@@ -1,0 +1,537 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: LinguaShift\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-29 19:34+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: LinguaShift\n"
+"Language-Team: LinguaShift\n"
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: accounts/templates/registration/login.html:4
+#: accounts/templates/registration/login.html:36
+#: core/templates/core/base.html:64
+msgid "Log In"
+msgstr "Ingia"
+
+#: accounts/templates/registration/login.html:5
+msgid "Welcome Back"
+msgstr "Karibu tena"
+
+#: accounts/templates/registration/login.html:6
+msgid "Log in to continue your translation workflow."
+msgstr "Ingia ili kuendelea na kazi yako ya utafsiri."
+
+#: accounts/templates/registration/login.html:8
+msgid "Sign In"
+msgstr "Ingia"
+
+#: accounts/templates/registration/login.html:9
+msgid "Enter your credentials to access your dashboard."
+msgstr "Weka vitambulisho vyako ili kufikia dashibodi yako."
+
+#: accounts/templates/registration/login.html:11
+#: accounts/templates/registration/register.html:11
+msgid "Account"
+msgstr "Akaunti"
+
+#: accounts/templates/registration/login.html:12
+msgid "Your data stays private and encrypted."
+msgstr "Data yako inabaki faragha na imesimbwa."
+
+#: accounts/templates/registration/login.html:19
+msgid "Username"
+msgstr "Jina la mtumiaji"
+
+#: accounts/templates/registration/login.html:20
+msgid "Enter your username"
+msgstr "Weka jina lako la mtumiaji"
+
+#: accounts/templates/registration/login.html:25
+msgid "Password"
+msgstr "Nenosiri"
+
+#: accounts/templates/registration/login.html:26
+msgid "Enter your password"
+msgstr "Weka nenosiri lako"
+
+#: accounts/templates/registration/login.html:40
+msgid "Don't have an account?"
+msgstr "Huna akaunti?"
+
+#: accounts/templates/registration/login.html:40
+msgid "Sign up"
+msgstr "Jisajili"
+
+#: accounts/templates/registration/login.html:41
+msgid "Forgot your password?"
+msgstr "Umesahau nenosiri lako?"
+
+#: accounts/templates/registration/register.html:4
+#: core/templates/core/base.html:65
+msgid "Sign Up"
+msgstr "Jisajili"
+
+#: accounts/templates/registration/register.html:5
+msgid "Create Your Account"
+msgstr "Unda Akaunti Yako"
+
+#: accounts/templates/registration/register.html:6
+msgid "Join LinguaShift for enterprise-grade translation."
+msgstr "Jiunge na LinguaShift kwa tafsiri ya kiwango cha kibiashara."
+
+#: accounts/templates/registration/register.html:8
+msgid "Get Started"
+msgstr "Anza"
+
+#: accounts/templates/registration/register.html:9
+msgid "It only takes a minute to set up your workspace."
+msgstr "Inachukua dakika moja tu kusanidi eneo lako la kazi."
+
+#: accounts/templates/registration/register.html:12
+msgid "Fill in the details below to register."
+msgstr "Jaza maelezo hapa chini ili kujisajili."
+
+#: accounts/templates/registration/register.html:31
+msgid "Create Account"
+msgstr "Unda Akaunti"
+
+#: accounts/templates/registration/register.html:35
+msgid "Already have an account?"
+msgstr "Una akaunti tayari?"
+
+#: accounts/templates/registration/register.html:35
+#: core/templates/core/translator.html:151
+msgid "Log in"
+msgstr "Ingia"
+
+#: core/templates/core/base.html:25 core/templates/core/translator.html:4
+msgid "Translator"
+msgstr "Mfasiri"
+
+#: core/templates/core/base.html:26 core/templates/core/history.html:4
+msgid "History Log"
+msgstr "Historia"
+
+#: core/templates/core/base.html:33 core/templates/core/base.html:34
+msgid "Language"
+msgstr "Lugha"
+
+#: core/templates/core/base.html:43
+msgid "Toggle theme"
+msgstr "Badilisha mandhari"
+
+#: core/templates/core/base.html:43
+msgid "Toggle light/dark theme"
+msgstr "Badili kati ya mandhari nyepesi/giza"
+
+#: core/templates/core/base.html:50
+msgid "Settings"
+msgstr "Mipangilio"
+
+#: core/templates/core/base.html:56
+msgid "Change password"
+msgstr "Badilisha nenosiri"
+
+#: core/templates/core/base.html:59
+msgid "Log out"
+msgstr "Toka"
+
+#: core/templates/core/base.html:103
+msgid "Built for Enterprise Precision."
+msgstr "Imeundwa kwa usahihi wa kibiashara."
+
+#: core/templates/core/base.html:105
+msgid "Privacy Policy"
+msgstr "Sera ya Faragha"
+
+#: core/templates/core/base.html:106
+msgid "Terms of Service"
+msgstr "Masharti ya Huduma"
+
+#: core/templates/core/base.html:107
+msgid "Security"
+msgstr "Usalama"
+
+#: core/templates/core/base.html:108
+msgid "Support"
+msgstr "Msaada"
+
+#: core/templates/core/history.html:105
+msgid "Translation History"
+msgstr "Historia ya Tafsiri"
+
+#: core/templates/core/history.html:106
+msgid "Your saved translations can be searched, edited, or removed here."
+msgstr "Tafsiri zako zilizohifadhiwa zinaweza kutafutwa, kuhaririwa, au kuondolewa hapa."
+"Tafsiri zako zilizohifadhiwa zinaweza kutafutwa, kuhaririwa, au kuondolewa "
+"hapa."
+
+#: core/templates/core/history.html:109
+msgid "Filter by input type"
+msgstr "Chuja kwa aina ya uingizaji"
+
+#: core/templates/core/history.html:110
+msgid "All"
+msgstr "Zote"
+
+#: core/templates/core/history.html:111
+msgid "Text"
+msgstr "Maandishi"
+
+#: core/templates/core/history.html:112
+msgid "Voice"
+msgstr "Sauti"
+
+#: core/templates/core/history.html:113 core/templates/core/history.html:158
+#: core/templates/core/history.html:226
+msgid "Document"
+msgstr "Hati"
+
+#: core/templates/core/history.html:121
+msgid "Search history..."
+msgstr "Tafuta historia..."
+
+#: core/templates/core/history.html:122
+msgid "Search translation history"
+msgstr "Tafuta historia ya tafsiri"
+
+#: core/templates/core/history.html:125
+msgid "Clear all translation history? This cannot be undone."
+msgstr "Futa historia yote ya tafsiri? Kitendo hiki hakiwezi kutenduliwa."
+
+#: core/templates/core/history.html:129
+msgid "Clear All"
+msgstr "Futa Yote"
+
+#: core/templates/core/history.html:141 core/templates/core/history.html:151
+msgid "Language Pair"
+msgstr "Jozi la Lugha"
+
+#: core/templates/core/history.html:142 core/templates/core/history.html:155
+msgid "Source"
+msgstr "Chanzo"
+
+#: core/templates/core/history.html:143 core/templates/core/history.html:168
+msgid "Translated"
+msgstr "Imetafsiriwa"
+
+#: core/templates/core/history.html:144 core/templates/core/history.html:176
+msgid "Timestamp"
+msgstr "Muhuri wa Muda"
+
+#: core/templates/core/history.html:145 core/templates/core/history.html:177
+msgid "Actions"
+msgstr "Vitendo"
+
+#: core/templates/core/history.html:170
+msgid "Translated file ready"
+msgstr "Faili lililotafsiriwa liko tayari"
+
+#: core/templates/core/history.html:183 core/templates/core/translator.html:110
+msgid "Download translated document"
+msgstr "Pakua hati iliyotafsiriwa"
+
+#: core/templates/core/history.html:188 core/templates/core/history.html:189
+msgid "Edit translation"
+msgstr "Hariri tafsiri"
+
+#: core/templates/core/history.html:195
+msgid "Delete this translation?"
+msgstr "Futa tafsiri hii?"
+
+#: core/templates/core/history.html:197
+msgid "Delete translation"
+msgstr "Futa tafsiri"
+
+#: core/templates/core/history.html:209
+msgid "Language pair"
+msgstr "Jozi la lugha"
+
+#: core/templates/core/history.html:217 core/templates/core/translator.html:82
+msgid "Target language"
+msgstr "Lugha lengwa"
+
+#: core/templates/core/history.html:231
+msgid "Original text"
+msgstr "Maandishi asili"
+
+#: core/templates/core/history.html:236
+msgid "Translated text"
+msgstr "Maandishi yaliyofasiriwa"
+
+#: core/templates/core/history.html:240
+msgid "Save"
+msgstr "Hifadhi"
+
+#: core/templates/core/history.html:241
+msgid "Cancel"
+msgstr "Ghairi"
+
+#: core/templates/core/history.html:250
+#, python-format
+msgid "No translations match \"%(query)s\"."
+msgstr "Hakuna tafsiri zinazolingana na \"%(query)s\"."
+
+#: core/templates/core/history.html:252
+#, python-format
+msgid "No %(mode)s translations yet."
+msgstr "Bado hakuna tafsiri za %(mode)s."
+
+#: core/templates/core/history.html:254
+msgid "No translations yet. Head to the Translator to get started."
+msgstr "Bado hakuna tafsiri. Nenda kwa Mfasiri ili kuanza."
+
+#: core/templates/core/history.html:266
+#, python-format
+msgid "Showing %(start)s–%(end)s of %(count_total)s entries"
+msgstr "Inaonyesha %(start)s–%(end)s kati ya maingizo %(count_total)s"
+
+#: core/templates/core/history.html:269
+msgid "History pages"
+msgstr "Kurasa za historia"
+
+#: core/templates/core/history.html:271
+msgid "Previous page"
+msgstr "Ukurasa uliopita"
+
+#: core/templates/core/history.html:275
+msgid "Next page"
+msgstr "Ukurasa unaofuata"
+
+#: core/templates/core/translator.html:8
+msgid "Precise Translation"
+msgstr "Tafsiri Sahihi"
+
+#: core/templates/core/translator.html:10
+msgid ""
+"Technical precision for global enterprise workflows. Powered by surgical-"
+"grade linguistic models."
+msgstr ""
+"Usahihi wa kiufundi kwa michakato ya kibiashara duniani kote. Inaendeshwa na "
+"miundo ya kiisimu yenye usahihi wa hali ya juu."
+
+#: core/templates/core/translator.html:28
+msgid "Drop file to upload"
+msgstr "Dondosha faili hapa kupakia"
+
+#: core/templates/core/translator.html:35
+msgid "Source language"
+msgstr "Lugha chanzi"
+
+#: core/templates/core/translator.html:43
+msgid ""
+"Press Enter to translate (Shift+Enter for a new line). Drag & drop or upload "
+"a PDF, DOCX, TXT, PNG, or JPG — max 1 MB; scanned PDFs limited to 3 pages."
+msgstr ""
+
+#: core/templates/core/translator.html:44
+msgid "Translator tips"
+msgstr "Vidokezo vya mfasiri"
+
+#: core/templates/core/translator.html:56
+msgid "Type, paste, or drop a file to translate…"
+msgstr "Andika, bandika, au dondosha faili ili kutafsiri…"
+
+#: core/templates/core/translator.html:60
+#: core/templates/core/translator.html:210
+msgid "bytes"
+msgstr "baiti"
+
+#: core/templates/core/translator.html:62
+msgid "Record audio"
+msgstr "Rekodi sauti"
+
+#: core/templates/core/translator.html:65
+msgid ""
+"Upload document — PDF, DOCX, TXT, PNG, or JPG (max 1 MB; scanned PDFs up to "
+"3 pages)"
+msgstr ""
+
+#: core/templates/core/translator.html:65
+msgid "Upload document"
+msgstr "Pakia hati"
+
+#: core/templates/core/translator.html:88
+msgid "Copy translation"
+msgstr "Nakili tafsiri"
+
+#: core/templates/core/translator.html:94
+#: core/templates/core/translator.html:226
+msgid "Translation will appear here..."
+msgstr "Tafsiri itaonekana hapa..."
+
+#: core/templates/core/translator.html:99
+msgid "Listen to translation"
+msgstr "Sikiliza tafsiri"
+
+#: core/templates/core/translator.html:102
+msgid "Share translation"
+msgstr "Shiriki tafsiri"
+
+#: core/templates/core/translator.html:106
+msgid "Download file format"
+msgstr "Muundo wa faili la kupakua"
+
+#: core/templates/core/translator.html:120
+msgid "Swap languages"
+msgstr "Badilisha lugha"
+
+#: core/templates/core/translator.html:120
+msgid "Swap source and target languages"
+msgstr "Badilisha lugha chanzi na lengwa"
+
+#: core/templates/core/translator.html:129
+msgid "Translate Now"
+msgstr "Fasiri Sasa"
+
+#: core/templates/core/translator.html:136
+msgid "Uploading document…"
+msgstr "Inapakia hati…"
+
+#: core/templates/core/translator.html:139
+msgid "Document processing progress"
+msgstr "Maendeleo ya uchakataji wa hati"
+
+#: core/templates/core/translator.html:146
+#: core/templates/core/translator.html:224
+msgid "Translation saved to your history."
+msgstr "Tafsiri imehifadhiwa kwenye historia yako."
+
+#: core/templates/core/translator.html:150
+#: core/templates/core/translator.html:225
+msgid "Translation complete."
+msgstr "Tafsiri imekamilika."
+
+#: core/templates/core/translator.html:152
+msgid "to save translations to your history."
+msgstr "ili kuhifadhi tafsiri kwenye historia yako."
+
+#: core/templates/core/translator.html:164
+msgid "Latency"
+msgstr "Muda wa kusubiri"
+
+#: core/templates/core/translator.html:173
+msgid "Match"
+msgstr "Ulinganifu"
+
+#: core/templates/core/translator.html:182
+msgid "Input Words"
+msgstr "Maneno Yaliyowekwa"
+
+#: core/templates/core/translator.html:211
+msgid "Enter text to translate."
+msgstr "Weka maandishi ya kufasiri."
+
+#: core/templates/core/translator.html:212
+msgid "MyMemory accepts at most"
+msgstr "MyMemory inakubali si zaidi ya"
+
+#: core/templates/core/translator.html:213
+msgid "UTF-8 bytes per translation."
+msgstr "baiti za UTF-8 kwa kila tafsiri."
+
+#: core/templates/core/translator.html:214
+msgid "Upload a document to translate longer text."
+msgstr "Pakia hati ili kutafsiri maandishi marefu zaidi."
+
+#: core/templates/core/translator.html:215 core/views.py:158 core/views.py:177
+msgid "Source and target languages must be different."
+msgstr "Lugha chanzi na lugha lengwa lazima ziwe tofauti."
+
+#: core/templates/core/translator.html:216
+msgid "which matches the target language. Choose a different target."
+msgstr "inayolingana na lugha lengwa. Chagua lengwa tofauti."
+
+#: core/templates/core/translator.html:217
+msgid "Translating..."
+msgstr "Inafasiri..."
+
+#: core/templates/core/translator.html:218
+msgid "Detecting..."
+msgstr "Inagundua..."
+
+#: core/templates/core/translator.html:219
+msgid "Preparing detector..."
+msgstr "Inaandaa kigunduzi..."
+
+#: core/templates/core/translator.html:220
+msgid "Detected"
+msgstr "Imegunduliwa"
+
+#: core/templates/core/translator.html:221
+msgid "Auto-detect"
+msgstr "Gundua kiotomatiki"
+
+#: core/templates/core/translator.html:222
+msgid "Translation failed."
+msgstr "Tafsiri imeshindwa."
+
+#: core/templates/core/translator.html:223
+msgid "Unable to reach the translation service."
+msgstr "Imeshindwa kufikia huduma ya tafsiri."
+
+#: core/templates/core/translator.html:227
+msgid "Select a specific source language before swapping."
+msgstr "Chagua lugha chanzi mahususi kabla ya kubadilisha."
+
+#: core/templates/core/translator.html:228
+msgid "Text exceeds the"
+msgstr "Maandishi yamezidi kikomo cha"
+
+#: core/templates/core/translator.html:229
+msgid "-byte limit."
+msgstr "baiti."
+
+#: core/templates/core/translator.html:230
+msgid "Upload as a document instead"
+msgstr "Pakia kama hati badala yake"
+
+#: core/templates/core/translator.html:231
+msgid "Selected:"
+msgstr "Kilichochaguliwa:"
+
+#: core/views.py:119
+msgid "Translation deleted."
+msgstr "Tafsiri imefutwa."
+
+#: core/views.py:127
+msgid "Translation history cleared."
+msgstr "Historia ya tafsiri imefutwa."
+
+#: core/views.py:149
+msgid "Translated text is required."
+msgstr "Maandishi yaliyotafsiriwa yanahitajika."
+
+#: core/views.py:151
+msgid "Document name is required."
+msgstr "Jina la hati linahitajika."
+
+#: core/views.py:156 core/views.py:175
+msgid "Select supported source and target languages."
+msgstr "Chagua lugha chanzi na lengwa zinazotumika."
+
+#: core/views.py:168
+msgid "Document translation updated."
+msgstr "Tafsiri ya hati imesasishwa."
+
+#: core/views.py:170
+msgid "Original and translated text are required."
+msgstr "Maandishi asili na yaliyofasiriwa yanahitajika."
+
+#: core/views.py:185
+msgid "Translation updated."
+msgstr "Tafsiri imesasishwa."
+
+#: core/views.py:242
+msgid "Choose txt or docx as the download format."
+msgstr "Chagua txt au docx kama muundo wa kupakua."

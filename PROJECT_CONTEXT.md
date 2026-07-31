@@ -41,7 +41,9 @@ django-final-project/
 │   │   └── __init__.py
 │   ├── static/
 │   │   ├── styles.css                 # Global CSS (currently empty)
-│   │   └── audio_handler.js           # Audio recording/upload + transcription JS
+│   │   ├── audio_handler.js           # Audio recording/upload + transcription JS
+│   │   ├── document_handler.js        # Document upload, translate, download JS
+│   │   └── output_actions.js          # Copy / listen / share helpers
 │   └── templates/
 │       └── core/
 │           ├── base.html              # Main styled base template (dark/light theme)
@@ -77,6 +79,9 @@ django-final-project/
 - **DEBUG**: Read from `DJANGO_DEBUG` or `DEBUG` env var (default `True`)
 - **ALLOWED_HOSTS**: Comma-separated from `DJANGO_ALLOWED_HOSTS` or `ALLOWED_HOSTS`
 - **GROQ_API_KEY**: Read from `GROQ_API_KEY` env var (used for Groq/Whisper API calls)
+- **OCR_SPACE_API_KEY**: Free OCR.space key for scanned PDFs/images
+- **DOCUMENT_MAX_UPLOAD_BYTES**: Upload size cap (default 1 048 576)
+- **DOCUMENT_MAX_EXTRACT_BYTES**: Cap extracted text before chunked translation (default 10 000)
 - **Local env file**: `.env` is loaded through `django-environ`; copy `.env.example`
 - **INSTALLED_APPS**: `django.contrib.admin`, `auth`, `contenttypes`, `sessions`, `messages`, `staticfiles`, `core`, `accounts`
 - **TEMPLATES**: `DIRS` includes `BASE_DIR / "templates"` (project-level templates), `APP_DIRS` is `True`
@@ -104,6 +109,9 @@ django-final-project/
 | Path | View Name | URL Name | Method |
 |------|-----------|----------|--------|
 | `""` (root) | `home` | `"home"` | GET |
+| `"api/translate/"` | `translate_api` | `"translate_api"` | POST |
+| `"api/translate-document/"` | `translate_document` | `"translate_document"` | POST |
+| `"api/download-translation/"` | `download_translation` | `"download_translation"` | POST |
 | `"transcribe/"` | `transcribe_audio` | `"transcribe_audio"` | POST |
 | `"translator/"` | `translator` | `"translator"` | GET |
 | `"history/"` | `history` | `"history"` | GET |
@@ -147,7 +155,7 @@ Django's built-in auth provides these URLs under `accounts/`:
 | `source_text` | `TextField` | `null=False` |
 | `translated_text` | `TextField` | `null=False` |
 | `was_detected` | `BooleanField` | `null=False`, `default=False` (True if source lang was auto-detected) |
-| `input_mode` | `CharField(max_length=16)` | `null=False`, `default="text"` ('text' or 'voice') |
+| `input_mode` | `CharField(max_length=16)` | `null=False`, `default="text"` ('text', 'voice', or 'document') |
 | `was_successful` | `BooleanField` | `null=False`, `default=True` |
 | `latency_ms` | `IntegerField` | - |
 | `word_count` | `IntegerField` | `default=0`, `null=False` |
@@ -352,7 +360,36 @@ Fallback Base (not actively used):
 
 ---
 
-## 14. KEY NAMING CONVENTIONS
+## 14. LANGUAGE DETECTION & SITE LOCALIZATION (i18n)
+
+Full details: [docs/language-detection.md](docs/language-detection.md).
+
+- **`core/utils.py`**: `get_client_ip(request)`, `get_country(ip)` — best-effort
+  IP → country lookup via ipinfo.io. Never raises; returns `None` on any
+  failure (timeout, network error, bad response, local/private IP).
+- **`core/views.py`**: `COUNTRY_LANGUAGE` dict (country code → language code)
+  and the detection logic inside `home(request)`. On first visit (no
+  `django_language` cookie yet), detects and activates a language, then sets
+  that cookie so `LocaleMiddleware` picks it up on every later request.
+  IMPORTANT: this Django version has no session-based language storage —
+  only the `django_language` cookie, `Accept-Language` header, or
+  `LANGUAGE_CODE` default. Don't reintroduce `request.session["language"]`.
+- **`project/settings.py`**: `LANGUAGES` (en, fr, de, ru, ar, sw),
+  `LOCALE_PATHS`, `IPINFO_TOKEN`/`IPINFO_BASE_URL`/`IPINFO_TIMEOUT_SECONDS`,
+  and `django.template.context_processors.i18n` added to `TEMPLATES`.
+- **`project/urls.py`**: `path("i18n/", include("django.conf.urls.i18n"))`
+  wires up Django's built-in `set_language` view (manual switcher in
+  `core/templates/core/base.html`'s top bar).
+- **`locale/<lang>/LC_MESSAGES/django.po` + `.mo`**: translated strings for
+  fr/de/ru/ar/sw. Regenerate with `manage.py makemessages -l <code>` after
+  adding `{% trans %}`/`gettext` calls, then `manage.py compilemessages`.
+- Arabic renders right-to-left automatically via
+  `dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}"` on `<html>` in
+  `base.html`.
+
+---
+
+## 15. KEY NAMING CONVENTIONS
 
 - **App name**: `core` (main), `accounts` (auth)
 - **Template namespacing**: Templates in `core/templates/core/` (prevents conflicts)
